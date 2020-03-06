@@ -14,11 +14,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\kasia\\OneDrive\\Pulpit\\dotnet\\lista 1\\zad2\\zad2\\zad2.csproj",
+      "projectUniqueName": "C:\\Users\\kasia\\OneDrive\\Dokumenty\\GitHub\\UWR_II\\DotNet\\lista 1\\zad2\\zad2\\zad2.csproj",
       "projectName": "zad2",
-      "projectPath": "C:\\Users\\kasia\\OneDrive\\Pulpit\\dotnet\\lista 1\\zad2\\zad2\\zad2.csproj",
+      "projectPath": "C:\\Users\\kasia\\OneDrive\\Dokumenty\\GitHub\\UWR_II\\DotNet\\lista 1\\zad2\\zad2\\zad2.csproj",
       "packagesPath": "C:\\Users\\kasia\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\kasia\\OneDrive\\Pulpit\\dotnet\\lista 1\\zad2\\zad2\\obj\\",
+      "outputPath": "C:\\Users\\kasia\\OneDrive\\Dokumenty\\GitHub\\UWR_II\\DotNet\\lista 1\\zad2\\zad2\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"

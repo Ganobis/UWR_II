@@ -1,0 +1,11 @@
+C:\Users\kasia\OneDrive\Dokumenty\GitHub\UWR_II\DotNet\lista 1\zad2\zad2\bin\Debug\netcoreapp3.0\zad2.exe
+C:\Users\kasia\OneDrive\Dokumenty\GitHub\UWR_II\DotNet\lista 1\zad2\zad2\bin\Debug\netcoreapp3.0\zad2.deps.json
+C:\Users\kasia\OneDrive\Dokumenty\GitHub\UWR_II\DotNet\lista 1\zad2\zad2\bin\Debug\netcoreapp3.0\zad2.runtimeconfig.json
+C:\Users\kasia\OneDrive\Dokumenty\GitHub\UWR_II\DotNet\lista 1\zad2\zad2\bin\Debug\netcoreapp3.0\zad2.runtimeconfig.dev.json
+C:\Users\kasia\OneDrive\Dokumenty\GitHub\UWR_II\DotNet\lista 1\zad2\zad2\bin\Debug\netcoreapp3.0\zad2.dll
+C:\Users\kasia\OneDrive\Dokumenty\GitHub\UWR_II\DotNet\lista 1\zad2\zad2\bin\Debug\netcoreapp3.0\zad2.pdb
+C:\Users\kasia\OneDrive\Dokumenty\GitHub\UWR_II\DotNet\lista 1\zad2\zad2\obj\Debug\netcoreapp3.0\zad2.csprojAssemblyReference.cache
+C:\Users\kasia\OneDrive\Dokumenty\GitHub\UWR_II\DotNet\lista 1\zad2\zad2\obj\Debug\netcoreapp3.0\zad2.AssemblyInfoInputs.cache
+C:\Users\kasia\OneDrive\Dokumenty\GitHub\UWR_II\DotNet\lista 1\zad2\zad2\obj\Debug\netcoreapp3.0\zad2.AssemblyInfo.cs
+C:\Users\kasia\OneDrive\Dokumenty\GitHub\UWR_II\DotNet\lista 1\zad2\zad2\obj\Debug\netcoreapp3.0\zad2.dll
+C:\Users\kasia\OneDrive\Dokumenty\GitHub\UWR_II\DotNet\lista 1\zad2\zad2\obj\Debug\netcoreapp3.0\zad2.pdb
