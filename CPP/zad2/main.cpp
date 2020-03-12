@@ -53,11 +53,28 @@ public:
 class Line
 {
 private:
-	double a;
-	double b;
-	double c;
+	const double a;
+	const double b;
+	const double c;
 public:
-	Line(){
+	Line(Point p1, Point p2){
+		this->a = p1.y - p2.y;
+		this->b = p2.x - p1.x;
+		this->c = (p1.y * (p2.x - p1.x) + p1.x * (p1.y - p2.y));
+	}
+	Line(Point p1, Vector v1){
+		this->a = p1.y - (v1.dy + p2.y);
+		this->b = (p1.x + v1.dx) - p1.x;
+		this->c = (p1.y * ((p1.x + v1.dx) - p1.x) + p1.x * (p1.y - (p1.y + v1.dy)));
+	}
+	Line(double a, double b, double c){
+		if (a == 0 || b ==0)
+		{
+			std::cout<<"Błędne dane!";
+		}
+		this->a = a;
+		this->b = b;
+		this->c = c;
 	}
 	~Line();
 	
