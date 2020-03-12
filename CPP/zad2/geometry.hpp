@@ -1,6 +1,10 @@
 #ifdef GEOMETRY_HPP
 #define GEOMETRY_HPP
 
+
+Point inter(Line l1, Line l2);
+Vector two_vec(Vector v1, Vector v2);
+
 class Point
 {
 public:
@@ -40,4 +44,7 @@ public:
 	double getA();
 	double getB();
 	double getC();
+
+	bool is_prep(Vector v1);
+	double how_far(Point p1);
 };
