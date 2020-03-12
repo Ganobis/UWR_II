@@ -8,8 +8,8 @@ Vector two_vec(Vector v1, Vector v2);
 class Point
 {
 public:
-	double const x;
-	double const y;
+	double x;
+	double y;
 
 	Point();
 	Point(double x, double y);
@@ -20,8 +20,8 @@ public:
 class Vector
 {
 public:
-	double const dx;
-	double const dy;
+	double dx;
+	double dy;
 	
 	Vector();
 	Vector(double dx, double dy);
@@ -31,9 +31,9 @@ public:
 class Line
 {
 private:
-	const double a;
-	const double b;
-	const double c;
+	double a;
+	double b;
+	double c;
 public:
 	Line();
 	Line(Point p1, Point p2);
