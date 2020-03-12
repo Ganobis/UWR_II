@@ -2,48 +2,46 @@
 
 #include <cmath>
 
-Point::	Point(){
-	this->x = 0;
-	this->y = 0;
+Vector::Vector(): dx(0), dy(0){
+
 }
 
-Point::	Point(double x, double y){
-	this->x = x;
-	this->y = y;
+Vector::Vector(double dx, double dy): this->dx(dx), this->dy(dy){
+
 }
 
-Point::Point(const Vector &v, const Point &p){
-	this->x = p.x + v.dx;
-	this->y = p.y + v.dy;
+Vector::Vector(const Vector &vector): dx(vector.dx), dy(vector.dy){
+
 }
 
-Point::	Point(const Point &p){
-	this->x = p.x;
-	this->y = p.y;
+Point::	Point() : x(0), y(0){
+
 }
 
-Vector::Vector(){
-	this->dx = 0;
-	this->dy = 0;
+Point::	Point(double x, double y) : this->x(x), this->y(y){
+
 }
 
-Vector::Vector(double dx, double dy){
-	this->dx = dx;
-	this->dy = dy;
+Point::Point(const Vector &v, const Point &p) : x(p.x + v.dx), y(p.y + v.dy){
+
 }
 
-Vector::Vector(const Vector &vector){
-	this->dx = vector.dx;
-	this->dy = vector.dy;
+Point::	Point(const Point &p) : x(p.x), y(p.y){
+
+}
+
+double Line::mi(double a, double b, double c){
+	double mi = 1/(sqrt(pow(a, 2) + pow(b, 2)));
+	return (c > 0) ? mi : (-1)*mi;
 }
 
 Line::Line(){
-	a = 1;
-	b = -1;
-	c = 0;
+	
 }
 
 Line::Line(Point p1, Point p2){
+	if(p1.x == p2.x && p1.y == p2.y)
+		throw invalid_argument("Cannot make line form one point!");
 	a = p1.y - p2.y;
 	b = p2.x - p1.x;
 	c = (p1.y * (p2.x - p1.x) + p1.x * (p1.y - p2.y));
@@ -60,9 +58,7 @@ Line::Line(Line l1, Vector v1){
 
 Line::Line(double a, double b, double c){
 	if (a == 0 || b ==0)
-	{
-		std::cout<<"Błędne dane!";
-	}
+		throw invalid_argument("Cannot make line without A or B!");
 	this->a = a;
 	this->b = b;
 	this->c = c;
@@ -83,5 +79,21 @@ bool Line::is_prep(Vector v1){
 }
 
 double Line::how_far(Point p1){
+	return (abs(a*p1.x + b*p1.y +c)/sqrt(pow(a, 2)+pow(b, 2)));
+}
 
+
+Point inter(Line l1, Line l2){
+	try{
+		double x = (((l1.getB*l2.getC)-(l2.getB*l1.getC))/((l1.getA*l2.getB)-(l2.getA*l1.getB)));
+		double y = (((l2.getA*l1.getC)-(l1.getA*l2.getC))/((l1.getA*l2.getB)-(l2.getA*l1.getB)));
+	}
+	catch(const char* msg){
+		std::cerr << msg << endl;
+	}
+	return new Point(x, y);
+}
+
+Vector two_vec(Vector v1, Vector v2){
+	return new Vector(v1.dx+v2.dx, v1.dy+v2.dy);
 }
