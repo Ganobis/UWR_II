@@ -63,7 +63,9 @@ Line::Line(Vector v1){
 }
 
 Line::Line(Line l1, Vector v1){
-
+	a = l1.getA();
+	b = l1.getB();
+	c = l1.getC() + sqrt(pow(v1.dx, 2) + pow(v1.dy, 2));
 }
 
 Line::Line(double a_f, double b_f, double c_f){
@@ -85,7 +87,7 @@ double Line::getC(){
 }
 
 bool Line::is_prep(Vector v1){
-	return (a == v1.dx && b == v1.dy);
+	return (a/v1.dx == b/v1.dy);
 }
 
 double Line::how_far(Point p1){
