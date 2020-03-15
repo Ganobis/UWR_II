@@ -1,10 +1,11 @@
 #include <iostream>
 #include <vector>
 
-short bricks[10001];
+int bricks[10001];
 short counter;
+bool is_use[10001];
 
-bool find_x(bool is_use[10001], , short wanted){
+bool find_x(std::vector<int64_t> v[10001], short wanted){
     if (wanted == 0 && counter != 0)
         return true;
     else{
@@ -16,7 +17,7 @@ bool find_x(bool is_use[10001], , short wanted){
             int x = v[wanted].size();
             for (int i = 0; i < x; ++i)
             {
-                if (find_x(is_use, v, v[wanted][i] >> 16))
+                if (find_x(v, v[wanted][i] >> 32))
                 {
                     counter--;
                     bricks[counter] = v[wanted][i];
@@ -33,17 +34,16 @@ bool find_x(bool is_use[10001], , short wanted){
 }
 
 bool is_sidewalk(int n, short data[][3]){
-    bool is_use[10001];
-    std::vector<int> end_bridge[10001];
-    int temp;
+    std::vector<int64_t> end_bridge[10001];
+    int64_t temp;
     for (int i = 0; i < n ; i++) {
         is_use[data[i][0]] = true;
         temp = data[i][2];
-        temp <<= 16;
+        temp <<= 32;
         temp += i;
         end_bridge[data[i][0]].push_back(temp);
     }
-    if(find_x(is_use, end_bridge, 0))
+    if(find_x(end_bridge, 0))
         return true;
     return false;
 }
