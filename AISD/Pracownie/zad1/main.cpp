@@ -4,7 +4,7 @@
 short bricks[10001];
 short counter;
 
-bool find_x(bool is_use[10001], std::vector<int> v[10001], short wanted){
+bool find_x(bool is_use[10001], , short wanted){
     if (wanted == 0 && counter != 0)
         return true;
     else{
@@ -13,7 +13,8 @@ bool find_x(bool is_use[10001], std::vector<int> v[10001], short wanted){
             return false;
         else{
             is_use[wanted] = false;
-            for (int i = 0; i < v[wanted].size(); ++i)
+            int x = v[wanted].size();
+            for (int i = 0; i < x; ++i)
             {
                 if (find_x(is_use, v, v[wanted][i] >> 16))
                 {
@@ -28,6 +29,7 @@ bool find_x(bool is_use[10001], std::vector<int> v[10001], short wanted){
             }
         }
     }
+    return false;
 }
 
 bool is_sidewalk(int n, short data[][3]){
