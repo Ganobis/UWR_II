@@ -50,6 +50,8 @@ bool is_sidewalk(int n, short data[][3]){
 
 
 int main(){
+    std::ios_base::sync_with_stdio(false);
+    std::cin.tie(nullptr);
     int n;
     std::cin>>n;
     short data[n][3];
@@ -66,9 +68,9 @@ int main(){
     for (int i = 0; i < n; ++i)
     {
         if (bricks[i] == -1)
-            std::cout << data[0][0] << " " << data[0][1] << " " << data[0][2] << std::endl; 
+            std::cout << data[0][0] << " " << data[0][1] << " " << data[0][2] << "\n"; 
         else
-            std::cout << data[bricks[i]][0] << " " << data[bricks[i]][1] << " " << data[bricks[i]][2] << std::endl;
+            std::cout << data[bricks[i]][0] << " " << data[bricks[i]][1] << " " << data[bricks[i]][2] << "\n";
     }
     return 0;
 }
