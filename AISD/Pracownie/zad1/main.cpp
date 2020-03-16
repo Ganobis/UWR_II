@@ -32,8 +32,14 @@ bool find_x(std::vector<int64_t> v[10001], short wanted){
     }
     return false;
 }
-
-bool is_sidewalk(int n, short data[][3]){
+int main(){
+    std::ios_base::sync_with_stdio(false);
+    std::cin.tie(nullptr);
+    int n;
+    std::cin>>n;
+    short data[n][3];
+    for (int i = 0; i < n; ++i)
+        std::cin>>data[i][0]>>data[i][1]>>data[i][2];
     std::vector<int64_t> end_bridge[10001];
     int64_t temp;
     for (int i = 0; i < n ; i++) {
@@ -43,21 +49,7 @@ bool is_sidewalk(int n, short data[][3]){
         temp += i;
         end_bridge[data[i][0]].push_back(temp);
     }
-    if(find_x(end_bridge, 0))
-        return true;
-    return false;
-}
-
-
-int main(){
-    std::ios_base::sync_with_stdio(false);
-    std::cin.tie(nullptr);
-    int n;
-    std::cin>>n;
-    short data[n][3];
-    for (int i = 0; i < n; ++i)
-        std::cin>>data[i][0]>>data[i][1]>>data[i][2];
-    if(!is_sidewalk(n, data)){
+    if(!find_x(end_bridge, 0)){
         std::cout<<"BRAK";
         return 0;
     }
