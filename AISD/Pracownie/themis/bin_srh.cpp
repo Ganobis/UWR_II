@@ -18,9 +18,7 @@ int main()
 		koniec = n;
 		x = (poczatek+koniec)/2;
 		while(x != n && x != 0){
-			std::cout<<x<<" ";
 			if((tab[x]<szukana) && (tab[x+1]>=szukana)){
-				std::cout<<x<<" "<<std::endl;
 				data[i] = x;
 				break;
 			}
