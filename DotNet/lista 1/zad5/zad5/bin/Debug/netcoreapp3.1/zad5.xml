@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>zad5</name>
+    </assembly>
+    <members>
+        <member name="T:zad5.Program">
+            <summary>
+            This program write on console all naturak numbers from 1 to 100 000,
+            whith are divisible by every digit and sume of all digit.
+            </summary>
+            <summary>
+            Class Program envoke all program
+            </summary>
+        </member>
+        <member name="M:zad5.Program.simply_func(System.Int32)">
+            <summary>
+            Function "simply_func" check the number is correct.
+            </summary>
+            <param name="number">Natural number</param>
+            <returns>True or false</returns>
+        </member>
+        <member name="M:zad5.Program.Main(System.String[])">
+            <summary>
+            Main of program, return nothing.
+            </summary>
+            <param name="args">-</param>
+        </member>
+    </members>
+</doc>
