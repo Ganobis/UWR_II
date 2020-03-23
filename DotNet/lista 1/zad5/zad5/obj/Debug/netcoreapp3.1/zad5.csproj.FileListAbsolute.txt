@@ -1,0 +1,12 @@
+C:\Users\Administrator\Desktop\UWR_II\DotNet\lista 1\zad5\zad5\bin\Debug\netcoreapp3.1\zad5.exe
+C:\Users\Administrator\Desktop\UWR_II\DotNet\lista 1\zad5\zad5\bin\Debug\netcoreapp3.1\zad5.deps.json
+C:\Users\Administrator\Desktop\UWR_II\DotNet\lista 1\zad5\zad5\bin\Debug\netcoreapp3.1\zad5.runtimeconfig.json
+C:\Users\Administrator\Desktop\UWR_II\DotNet\lista 1\zad5\zad5\bin\Debug\netcoreapp3.1\zad5.runtimeconfig.dev.json
+C:\Users\Administrator\Desktop\UWR_II\DotNet\lista 1\zad5\zad5\bin\Debug\netcoreapp3.1\zad5.dll
+C:\Users\Administrator\Desktop\UWR_II\DotNet\lista 1\zad5\zad5\bin\Debug\netcoreapp3.1\zad5.pdb
+C:\Users\Administrator\Desktop\UWR_II\DotNet\lista 1\zad5\zad5\obj\Debug\netcoreapp3.1\zad5.csprojAssemblyReference.cache
+C:\Users\Administrator\Desktop\UWR_II\DotNet\lista 1\zad5\zad5\obj\Debug\netcoreapp3.1\zad5.AssemblyInfoInputs.cache
+C:\Users\Administrator\Desktop\UWR_II\DotNet\lista 1\zad5\zad5\obj\Debug\netcoreapp3.1\zad5.AssemblyInfo.cs
+C:\Users\Administrator\Desktop\UWR_II\DotNet\lista 1\zad5\zad5\obj\Debug\netcoreapp3.1\zad5.dll
+C:\Users\Administrator\Desktop\UWR_II\DotNet\lista 1\zad5\zad5\obj\Debug\netcoreapp3.1\zad5.pdb
+C:\Users\Administrator\Desktop\UWR_II\DotNet\lista 1\zad5\zad5\bin\Debug\netcoreapp3.1\zad5.xml
