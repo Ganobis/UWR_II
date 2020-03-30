@@ -3,7 +3,7 @@
 
 short idd[4];
 
-int main(int argc, char const *argv[])
+int main()
 {
 	short i;
 	int x;
