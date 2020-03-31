@@ -1,0 +1,36 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath}
+\usepackage{hyperref}
+\usepackage{mathtools}
+
+\title{Zadanie 2}
+\author{Wojciech Ganobis}
+\date{31/03/20}
+
+\begin{document}
+\maketitle
+ Wiemy, ze aby byla to gestosc dwuwymiarowa, podwojna calka z ograniczen podanych w zadaniu $0 \leq x \leq 3, 1 \leq y \leq 2$, jest rowna 1 oraz funkcja na całym obszarze musi być dodatnia.
+
+\begin{description}
+\item[I)]
+$\int_{x_{1}}^{x_{2}} \int_{y_{1}}^{y_{2}} f(x,y) dy dx$
+$$\int_0^3 \int_1^2 Cxy+x+y dy dx = 1$$
+$$\int_0^3 \int_1^2 Cxy+x+y dy dx = \int_0^3 \left( \int_1^2 Cxy dy + \int_1^2x dy + \int_1^2 y dy \right) dx =$$
+$$ = \int_0^3 \left( Cx\frac{3}{2} + x + \frac{3}{2} \right) dx =$$
+$$=\frac{3}{2}C \cdot \frac{9}{2} +\frac{9}{2} + \frac{9}{2} = \frac{27}{4}C + 9$$
+$$\frac{27}{4}C + 9 = 1$$
+$$C=\frac{-32}{27} $$
+
+$f(x,y) = \frac{-32}{27}xy + x + y$
+
+\item[II)]
+$f(x,y) \leq 0$
+
+Wezmy dla przykladu skrajne warotsci. Otrzymujemy:
+
+$$f(3,2) = \frac{-32}{27} \cdot 3 \cdot 2 + 3 + 2 = \frac{-19}{9}$$
+Niestety otrzymujemy wartosc ujemna, co oznacza, ze calka nie jest dodatnia na calym obszarze. Nie ma wiec takiej stalej C.
+\end{description}
+  
+
+\end{document}
