@@ -1,0 +1,33 @@
+SPRAWDZACZKA AISD - ZADANIE C
+
+Sposób użycia:
+1. Umieść pliki check.sh, gen, verify i solution w wybranym folderze.
+2. W tym folderze umieść również swój program który chcesz przetestować.
+   Nazwij go tested. Zadbaj o to aby format wyjścia był poprawny, oraz
+   żeby program wypisywał znak nowej linii po ostatnim wierszu.
+3. Możesz testować wpisując polecenie
+   bash check.sh liczba_testów <waga_do_uzyskania> <liczba_monet> <maksymalna_wartość_monety>
+   Argumenty w <> są opcjonalne, domyślne wartości: waga_do_uzyskania=10.000,
+   liczba_monet=10, maksymalna_wartość_monety=500
+   Przykłady:
+   bash check.sh 10
+   bash check.sh 5 100 2 50
+4. Skrypt powinien wypisać odpowiedni komunikat jeśli coś pójdzie nie tak.
+   Test na którym pojawił się błąd będzie w pliku test.in, odpowiedź wzorcówki w test.out
+
+
+Uwagi:
+1. Sprawdzaczka sprawdza zarówno optymalność wyniku (czy minimum i maksimum są takie same w
+   programie testowanym i we wzorcówce), jak i jego poprawność (czy monety wypisane przez
+   program faktycznie sumują się do oczekiwanej wagi, a także czy sumaryczna wartość ich
+   nominałów jest taka jak podana).
+2. Skrypt generuje w mnóstwo plików (konkretnie - 6). Pewnie da się to zrobić lepiej,
+   ale jak próbowałem to nie działało, a aż tak mi nie zależy.
+   test.in i test.out - wygenerowany test i to, co zwraca wzorcówka.
+   Plik tested.in na początku zawiera dane z testu, a potem wyjście testowanego programu.
+   Jest on potrzebny jako input do programu verify, output znajduje się potem w tested.out.
+   Analogicznie jest z solution.in i solution.out
+3. Monety generowane są tak żeby miały podobną wagę i nominał. Zamieszczam kod źródłowy
+   generatora testów, jakby komuś się chciało to można sobie to pozmieniać.
+4. Nie chciało mi się pisać bruta, użyłem mojego rozwiązania które wysłałem na sprawdzaczkę.
+   Wydaje mi się że działa, ale nic nie gwarantuję.
