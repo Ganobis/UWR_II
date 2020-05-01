@@ -82,7 +82,7 @@ namespace zad2
             {
                 listView_auta.Visible = true;
                 listView_auta.Items.Clear();
-                listView_auta.Items.Add("500 ABARD");
+                listView_auta.Items.Add("500 ABARTH");
                 listView_auta.Items.Add("124 ABARTH");
                 listView_auta.Items.Add("PUNTO EVO");
                 listView_auta.Items.Add("Seicento");
