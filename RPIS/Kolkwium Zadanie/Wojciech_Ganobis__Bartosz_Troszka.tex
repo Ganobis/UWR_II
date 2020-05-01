@@ -1,0 +1,82 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath}
+\usepackage{hyperref}
+\usepackage{mathtools}
+\usepackage{listings}
+\usepackage{xcolor}
+
+\lstset { %
+    language=C++,
+    backgroundcolor=\color{black!5}, % set backgroundcolor
+    basicstyle=\footnotesize,% basic font setting
+}
+
+\title{Zadanie Kolokwium}
+\author{Wojciech Ganobis, Bartosz Troszka}
+\date{19/04/20}
+
+\begin{document}
+\maketitle
+Dla ustalonego $t > 0$ obliczyć wartość całki 
+$$ G(t) = \int_0^{t} exp(-\frac{x^{2}}2  ) dx $$
+ używajac metody Romberga i złożonego wzoru trapezów.
+
+Opiszmy metode Romberga.
+
+Metoda Romberga jest metoda całkowania numerycznego.\\
+Obliczajac wzorem otrzymujemy tablice Romberga która wyglada nastepujaco:\\ \\
+$R_{0, 0}$\\
+$R_{0, 1} R_{1, 0}$\\
+$R_{0, 2} R_{1, 1} R_{2, 0}$\\
+$...$
+\\
+Metode Romberga można opisać rekurencyjnie:
+\[ \begin{cases} 
+      R_{m,i} &: \frac{4^m\cdot R_{m-1,i+1}-R_{m-1,i}}{4^m-1} \\
+      R_{0,i} &: R_{2^i}=h_i\cdot \sum_{k=0}^{2^i-1}\left(\frac{f(x_k)+f(x_{k+1})}{2}\right) \\
+   \end{cases}
+\]
+
+Pierwsza kolumna obliczana jest metoda trapezów, druga to metoda simsona.
+Naszym wynikiem bedzie ostatni element trójkata (prawy dolny róg $R_(n, 0)$), ponieważ ma najlepsze przybliżenie.
+
+Trzeba teraz napisać program obliczajacy tablice Romberga, z wystarczajacym błedem przybliżenia.
+
+Bład w naszym przybliżeniu:\\
+$$bład   R_{n, 0} = O((\frac{1}{2^{n}} * (b - a)^{2})) =$$
+$$= O((\frac{1}{2^{n}} * t)^{2})$$
+$$\frac{t^{2}}{2^{2n}} < 10^{-4} $$
+$$ 2^{2n} > 10^{4} * t^{2}$$
+\\
+Podstawiajac to powstałego wzoru wiemy już jak dobrać n w zależności od t.
+
+Wzór Romberga w jezyku C++:\\
+\begin{lstlisting}
+h=xn-x0;
+t[0][0]=h/2*((1/x0)+ (1/xn));
+for(i=1;i<=p;i++){
+    sl=pow(2,i-1);
+    sm=0;
+    for(j=1;j<=sl;j++){
+        a=x0+(2*j-1)*h/pow(2,i);
+        sm=sm+(1/a);
+    }
+    t[i][0]=t[i-1][0]/2+sm*h/pow(2,i);
+}
+for(i=1;i<=p;i++){
+    for(j=1;j<=i && j<=q;j++){
+        m=i-j;
+        t[m+j][j]=(pow(4,j)*t[m+j][j-1]-t[m+j-1][j-1])/(pow(4,j)-1);
+    }
+}
+printf("%f",t[p][q]);
+\end{lstlisting}
+Gdzie :\\
+\begin{description}
+\item[a)] x0 = poczatek przedziału
+\item[b)] xn = koniec przedziału
+\item[c)] t = tablica Romberga
+\end{description}
+
+
+\end{document}
