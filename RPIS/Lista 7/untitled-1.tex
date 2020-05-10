@@ -1,0 +1,30 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath}
+\usepackage{hyperref}
+\usepackage{mathtools}
+
+\title{Zadanie 4}
+\author{Wojciech Ganobis}
+\date{28/04/20}
+
+\begin{document}
+\maketitle
+Niech $X_1=Y_1\cos{Y_2}$, $X_2=Y_1\sin{Y_2}$, $0<Y_1<1$, $0\leq Y_2 \leq 2\pi$. Znajdź gestość $g(y_1,y_2)$ zmiennej $(Y_1,Y_2)$. Sprawdź czy $Y_1$ i $Y_2$ sa niezależne.\\
+
+
+Jakobian:
+$$|J|=\begin{vmatrix}
+\cos{Y_2} & Y_1\sin{Y_2}\\
+\sin{Y_2} & -Y_1\cos{Y_2}
+\end{vmatrix} = | -Y_1\cos^2{Y_2} - Y_1\sin^2{Y_2} | = |-Y_1| = Y_1$$
+Gestość:
+$$g(y_1,y_2)=f(x_1,x_2)\cdot |J| = \frac{1}{\pi} \cdot y_1 = \frac{y_1}{\pi} $$
+Gestość $y_1$:
+$$g(y_1)=\int_0^{2\pi} \frac{y_1}{\pi}\ dy_2 = \left[ \frac{y_1 y_2}{\pi} \right]_{0}^{2\pi} = 2y_1 $$
+Gestość $y_2$:
+$$g(y_2)=\int_0^1 \frac{y_1}{\pi}\ dy_1 = \frac{1}{2\pi} $$
+Niezależność:
+$$g(y_1) \cdot g(y_2) = \frac{1}{2\pi} \cdot 2y_1 = \frac{y_1}{\pi} = g(y_1,y_2)$$
+$Y_{1}$ i $ Y_{2}$ sa niezależne, ponieważ $g(y_1,y_2)= g(y_1) \cdot g(y_2)$
+
+\end{document}
