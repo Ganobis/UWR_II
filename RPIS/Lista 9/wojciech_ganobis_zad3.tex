@@ -1,0 +1,27 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath}
+\usepackage{hyperref}
+\usepackage[latin1]{inputenc}
+\usepackage{graphicx}
+\usepackage{enumerate}
+
+
+\title{Zadanie 3}
+\author{Wojciech Ganobis 310519}
+\date{12/05/20}
+
+\begin{document}
+\maketitle
+
+Wzor na nasza funkcje gestosci to:
+$$f(x,\theta) = \frac{1}{2a}  ;dla \theta - a \leq x \leq \theta + a$$
+Funkcie wiarygodnosci mozemy zapisac wiec jako:
+$$L(x_{i};\theta) = \prod_{k=1}^{n}f(x_{k};\theta) = (\frac{1}{2a})^{n};dla \theta - a \leq x_{i} \leq \theta + a$$
+Teraz mozemy przeksztalcic przedzialy:
+$$\theta - a \leq min(x_{1}, ..., x_{n}) \leftrightarrow \theta  \leq min(x_{1}, ..., x_{n}) + a$$
+$$\theta + a \leq max(x_{1}, ..., x_{n}) \leftrightarrow \theta  \leq max(x_{1}, ..., x_{n}) - a$$
+I podstawiajac to otrzymamy:
+$$L(x_{i};\theta)  = (\frac{1}{2a})^{n};dla,  max(x_{1}, ..., x_{n}) - a \leq \theta \leq  min(x_{1}, ..., x_{n}) + a$$
+Czyli:
+$$\hat{\theta} = \frac{ max(x_{1}, ..., x_{n}) - a +  min(x_{1}, ..., x_{n}) + a}{2} = \frac{ max(x_{1}, ..., x_{n}) +  min(x_{1}, ..., x_{n})}{2}$$
+\end{document}

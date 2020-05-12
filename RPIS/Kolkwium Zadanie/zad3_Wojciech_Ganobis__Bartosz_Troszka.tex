@@ -1,0 +1,37 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath}
+\usepackage{hyperref}
+\usepackage[latin1]{inputenc}
+\usepackage{graphicx}
+\usepackage{enumerate}
+
+
+\title{Zadanie kolokwium 3}
+\author{Wojciech Ganobis 310519, Bartosz Troszka 309912}
+\date{10/05/20}
+
+\begin{document}
+\maketitle
+Niech $Y$ bedzie zmienna losowa z $n$ stopniami swobody. Ustalmy jeszcze ze, $\sqrt{Y} = \hat{Y}$. Wtedy nasza gestosc to:
+$$f_{\hat{Y}}(\hat{y}) = \frac{2^{1}-\frac{n}{2}}{\Gamma (\frac{n}{2})}\hat{y}^{n-1} exp( - \frac{\hat{y}^{2}}{2} )$$
+\\
+Zdefinniujmy $X = \frac{1}{\sqrt{n}}\hat{Y}$. Wtedy $\frac{\partial \hat{Y}}{\partial X}, teraz otrzymujemy:$
+$$f_{X}(x) = f_{\hat{Y}}(\sqrt{n}x)|\frac{\partial \hat{Y}}{\partial X}| =  \frac{2^{1-\frac{n}{2}}}{\Gamma (\frac{n}{2})} (\sqrt{n}x)^{n-1} exp(-\frac{(\sqrt{n}x)^{2}}{2})\sqrt{n} = \frac{2^{1}-\frac{n}{2}}{\Gamma (\frac{n}{2})} n^{\frac{n}{2}}x^{n-1} exp(-\frac{n}{2}x^{2})$$
+\\
+Niech Z bedzie zmienna losowa.
+$$ T = \frac{Z}{\sqrt{\frac{Y}{n}}} = \frac{Z}{X} $$
+\\
+Wedlug standardowego wzoru na funkcje gestosci stosunku dwoch niezaleznych zmiennych losowych:
+$$ f_{T}(t) = \int_{-\infty}^{\infty} |x|f_{Z}(xt)f_{X}(x)dx $$
+\\
+Ale mozemy zredukowac calke od 0 w gore, poniewaz $X$ jest nieujemy. Otrzymujemy:
+$$ f_{T}(t) = \int_{0}^{\infty} xf_{Z}(xt)f_{X}(x)dx = \int_{0}^{\infty} x\frac{1}{\sqrt{2\pi}}exp(-\frac{(xt)^{2}}{2})\frac{2^{1-\frac{n}{2}}}{\Gamma(\frac{n}{2})}n^{\frac{n}{2}}x^{n-1}exp(-\frac{n}{2}x^{2})dx =$$$$= \frac{1}{\sqrt{2\pi}}\frac{2^{1-\frac{n}{2}}}{\Gamma(\frac{n}{2})}n^{\frac{n}{2}}\int_{0}^{\infty} x^{n}exp(-\frac{1}{2}(n+t^{2})x^{2})dx $$
+\\
+Zdefinikujmy sobie teraz $m = x^{2} \Rightarrow dm = 2xdx \Rightarrow dx = \frac{dm}{2x}, x = m^{\frac{1}{2}} $. Teraz podstawmy sobie pod otrzymana calke:
+$$\int_{0}^{\infty}x^{n}exp(-\frac{1}{2}(n+t^{2})m)\frac{dm}{2x} = \frac{1}{2}\int^{\infty}_{0}m^{\frac{n-1}{2}}exp(-\frac{1}{2}(n+t^{2})m)dm$$
+Funkcje Gamma mozna zapisac jako:$ g(m; k,0) = \frac{m^{k-1}exp(-\frac{m}{\Theta})}{\Theta^{k}\Gamma(k)}$. Musimy jeszcze dopasowac zmienne: $k-1 = \frac{n-1}{2} \Rightarrow k*=\frac{n+1}{2}$, $\frac{1}{\Theta} = \frac{1}{2}(n+t^{2}) \Rightarrow \Theta * = \frac{2}{n+t^{2}}$, a stad otrzymujemy $(*) = \frac12(\theta^*)^{k^*}\Gamma(k^*) = \frac12 \Big (\frac 2 {n+t^2}\Big )^{\frac {n+1}{2}}\Gamma\left(\frac {n+1}{2}\right) = 2^{\frac {n-1}{2}}n^{-\frac {n+1}{2}}\Gamma\left(\frac {n+1}{2}\right)\left(1+\frac {t^2}{n}\right)^{-\frac 12 (n+1)}$. Teraz mozemy wywnioskowac ze:
+$$f_T(t) = \frac{1}{\sqrt{2\pi}}\frac {2^{1-\frac n2}}{\Gamma\left(\frac{n}{2}\right)} n^{\frac n2}2^{\frac {n-1}{2}}n^{-\frac {n+1}{2}}\Gamma\left(\frac {n+1}{2}\right)\left(1+\frac {t^2}{n}\right)^{-\frac 12 (n+1)}=\frac{\Gamma[(n+1)/2]}{\sqrt{n\pi}\Gamma(n/2)}\left(1+\frac {t^2}{n}\right)^{-\frac 12 (n+1)}$$
+Do czego chcialismy dojsc.
+
+
+\end{document}

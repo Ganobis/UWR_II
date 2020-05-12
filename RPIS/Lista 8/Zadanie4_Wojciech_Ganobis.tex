@@ -1,0 +1,25 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath}
+\usepackage{hyperref}
+\usepackage[latin1]{inputenc}
+\usepackage{graphicx}
+\usepackage{enumerate}
+
+
+\title{Zadanie 4}
+\author{Wojciech Ganobis}
+\date{05/05/20}
+
+\begin{document}
+\maketitle
+Wiemy, ze zmienne $X_{1}, X_{2}, oraz X_{3}$ sa niezalezne i maja rozklad o dystrybuanie $F(x)$ i gestosci $f(x)$.
+$$f(x) = (F(x))'$$
+$$F_{(2)}(x) = P(X_{(2)} < x) = P(X_{1} < x) \cdot P(X_{2} < x) \cdot P(X_{3} > x) + $$$$+ P(X_{1} < x)\cdot P(X_{3} < x) \cdot P(X_{2} > x) +  P(X_{2} < x)\cdot P(X_{3} < x) \cdot P(X_{1} > x) +$$$$+  P(X_{1} < x)\cdot P(X_{2} < x) \cdot P(X_{3} < x) =$$$$ = F(x) \cdot F(x) \cdot (1-F(x)) +  F(x) \cdot F(x) \cdot (1-F(x)) + F(x) \cdot F(x) \cdot (1-F(x)) + F(x) \cdot F(x) \cdot F(x)=$$$$ = 3 \cdot F^{2}(x) \cdot (1-F(x)) + F^{3}(x)$$
+\\
+\\
+$$f_{(2)} =( F_{(2)})' = 6F(x) \cdot (1-F(x)) \cdot f(x) + 3F^{2}(x) \cdot (-f(x)) + 3F^{2}(x) \cdot f(x) =$$$$= 6F(x) \cdot (1-F(x)) \cdot f(x) $$
+Co mielismy udowodnic.
+
+
+
+\end{document}
