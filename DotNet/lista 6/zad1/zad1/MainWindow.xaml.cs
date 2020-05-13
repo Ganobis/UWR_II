@@ -70,5 +70,10 @@ namespace zad1
         {
             uzupelniajace = true;
         }
+
+        private void TextNazwa_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
+        }
     }
 }

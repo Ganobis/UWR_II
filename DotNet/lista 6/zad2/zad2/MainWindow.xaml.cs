@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -82,6 +83,28 @@ namespace zad2
                 listView_auta.Items.Add("Tico");
                 listView_auta.Items.Add("Leganza");
             }
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            int odliczanie = 0;
+            Postep.Value = 0;
+            Task.Run(() =>
+            {
+                for (int i = 0; i < 100; i++)
+                {
+                    Thread.Sleep(5);
+                    this.Dispatcher.Invoke(() =>
+                    {
+                        Postep.Value = i;
+                    });
+                }
+            });
+        }
+
+        private void Postep_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+
         }
     }
 }

@@ -14,7 +14,7 @@
         <GroupBox Header="Rodzaj studiów" HorizontalAlignment="Left" Height="143" Margin="0,238,0,0" VerticalAlignment="Top" Width="826"/>
         <Label Content="Nazwa:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="23,60,0,0"/>
         <Label Content="Adres:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="23,139,0,0"/>
-        <TextBox Name="TextNazwa"  HorizontalAlignment="Left" Height="37" TextWrapping="Wrap" Text="Uniwersytet Wrocławski" VerticalAlignment="Top" Width="629" Margin="158,60,0,0"/>
+        <TextBox Name="TextNazwa"  HorizontalAlignment="Left" Height="37" TextWrapping="Wrap" Text="Uniwersytet Wrocławski" VerticalAlignment="Top" Width="629" Margin="158,60,0,0" TextChanged="TextNazwa_TextChanged"/>
         <TextBox Name="TextAdres"  HorizontalAlignment="Left" Height="33" TextWrapping="Wrap" Text="pl. Uniwersytecki 1, 50-137 Wrocław" VerticalAlignment="Top" Width="629" Margin="158,139,0,0"/>
         <Label Content="Cykl nauki:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="23,280,0,0"/>
         <ComboBox Name="Combo1"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="629" Margin="158,280,0,0" SelectionChanged="ComboBox_SelectionChanged">
