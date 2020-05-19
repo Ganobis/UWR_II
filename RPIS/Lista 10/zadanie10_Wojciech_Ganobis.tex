@@ -1,0 +1,34 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath}
+\usepackage{hyperref}
+\usepackage[latin1]{inputenc}
+\usepackage{graphicx}
+\usepackage{enumerate}
+
+
+\title{Zadanie 10}
+\author{Wojciech Ganobis 310519}
+\date{19/05/20}
+
+\begin{document}
+\maketitle
+
+Wiemy, ze prosta regresmi wyraza sie wzorem:
+$$y = a\cdot x + b$$
+gdzie,
+$$b = \overline{y} - a\overline{x}; a = \frac{\sum^{n}_{i=1}x_{i}y_{i} - n\overline{x}\overline{y}}{\sum^{n}_{i=1}x^{2}_{i}-nx^{2}}$$
+Wiec liczyny:
+
+\begin{itemize}
+\item $\overline{x} = \frac{1}{8}\cdot\sum^{8}_{i=1}x_{i}=\frac{56}{8}=7$
+\item $\overline{y} = \frac{1}{8}\cdot\sum^{8}_{i=1}y_{i}=\frac{50}{8}=5$
+\item $\sum^{8}_{i=1}x_{i}y_{i}=364$
+\item $\sum^{8}_{i=1}x^{2}_{i}=524$
+\item $a = \frac{\sum^{n}_{i=1}x_{i}y_{i} - n\overline{x}\overline{y}}{\sum^{n}_{i=1}x^{2}_{i}-nx^{2}} = \frac{364-8\cdot7\cdot5}{524-8\cdot7^{2}}=\frac{84}{132}=\frac{7}{11}$
+\item $b = \overline{y} - a\overline{x} = 5-7\cdot\frac{7}{11} = \frac{6}{11}$
+\end{itemize}
+
+Nasz otrzymany wynik to:
+$$y=\frac{7}{11}x+\frac{6}{11}$$
+
+\end{document}
