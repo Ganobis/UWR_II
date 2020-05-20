@@ -1,0 +1,55 @@
+\documentclass{article}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+%\usepackage{pgfplots}
+%\usepackage[OT4,plmath]
+\usepackage{epstopdf}
+\usepackage{amsmath,amssymb,amsfonts,amsthm}
+\usepackage[utf8]{inputenc}
+%\usepackage[english]{babel}
+\newcommand\tab[1][1cm]{\hspace*{#1}}
+\usepackage{hyperref}
+\usepackage{color}
+\usepackage{algorithm2e}
+\usepackage[margin=1.25in]{geometry}
+\usepackage[figurename=Wykres]{caption}
+\DeclareMathSizes{12}{30}{16}{12}
+%\usepackage[scaled=1.5]{helvet}
+
+\title{Lista 2, Zadanie 6}
+\author{Wojciech Ganobis 310519}
+\date{20/05/20}
+
+\begin{document}
+\maketitle
+
+Do wykonania tego zadania potrzebujemy udowodnić dodatkowy lemat. \\\\
+Lemat1: Dla dowolnego cyku w grafie, jeśli waga krwaędzi jest większa niż waga każdej innej krawędzi w tym cyku wtedy krawędź nie może należeć do minimalego drzewa spinającego.
+\\
+Dowód nie wprost: Załóżmy że mamy drzewo e z taką krawędzią, która jest największa w cyklu C, oraz że ta krawędź e należy do drzewa MST. Teras usuńmy tą krawędź e. Otrzymujemy dwa drzewa. Zróbmy ponownie drzewo MST. Szukamy najmniejszej krawędzi i znajdujemy mniejszą niż e, bo był cykl z e. Czyli nasze pierwsze MST nie było MST.
+\\\\
+Lemat2: Jeśli krawędź e nie jest maksymalna na żadnym cyklu w G, to należy do jakiegoś MST.
+\\
+Dowód nie wprost: Załóżmy że e nie jest maksymalna na żadnym cyklu G i nie należy do MST. Teraz mamy dwie możliwośći:
+\\
+- e nie należy do cyklu, wtedy e musi należeć do MST więc sprzeczność
+\\
+- e należy do cyklu, wiemy także że e nie jest maksymalne, więc z lematu1 wiemy że tu także mamy sprzeczność, bo jeśli coś w tym cyklu jest większe(a jest) to każde mniejsze musi należeć do MST
+\\
+\\
+Teraz wykorzystując lematy ułóżmy algorytm. Działa on tak, że bierzemy nasz graf i usuwamy w nim krawędź do sprawdzneia. Potem puszczamy zmodyfikowanego DFS'a, który nie przechodzi przez krawędzie "cięższe" niż nasz krawędź do usunięcia. Jeśli dojdize do końca oznacza to że usuneliśmy maksymalną krawędź, z Lematu1 nie należy do MST. Jeśli natomiast końcowa krawędź nie została owiedzona to znaczy że graf się rozspujnił albo wybrana krawędź nie była krawędzią maksymalną. Z lematu 2 wiemy że ta krawędź musi należeć do MST.
+Wiedząc to rozważmy taki algorytm:\\\\
+CzyNależy(G, e):        /G-graf, e-szukany, odwiedzony - tabelka z odwiedzonymi wieszchołkami, .1, .2- początek, koniec krawędzi\\
+\tab usuń krawędź e\\
+\tab DFS(e.1, e.waga)\\
+\tab return !odwiedzony[e.2]\\
+\\
+DFS(p, w):\\
+\tab odwiedzony[p] = true\\
+\tab for( $0 \leq i \leq G[p].size$ )\\
+\tab\tab jeśli ( !(odwiedzony[G[p][i].1])$ \wedge$ G[p][i].2<w)\\
+\tab\tab\tab to DFS(G[p][i].1, w)\\
+\\
+W tym algorytmie przechodzimy po wszystkich wieszchołkach i po wszystkich krawędziach więc złożonośc to O(n+m)\\
+
+\end{document}

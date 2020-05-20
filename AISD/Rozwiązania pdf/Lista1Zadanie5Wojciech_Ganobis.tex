@@ -1,0 +1,46 @@
+\documentclass{article}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+%\usepackage{pgfplots}
+%\usepackage[OT4,plmath]
+\usepackage{epstopdf}
+\usepackage{amsmath,amssymb,amsfonts,amsthm}
+\usepackage[utf8]{inputenc}
+%\usepackage[english]{babel}
+\newcommand\tab[1][1cm]{\hspace*{#1}}
+\usepackage{hyperref}
+\usepackage{color}
+\usepackage{algorithm2e}
+\usepackage[margin=1.25in]{geometry}
+\usepackage[figurename=Wykres]{caption}
+\DeclareMathSizes{12}{30}{16}{12}
+%\usepackage[scaled=1.5]{helvet}
+
+\title{Lista 1, Zadanie 5}
+\author{Wojciech Ganobis 310519}
+\date{20/05/20}
+
+\begin{document}
+\maketitle
+Pierw sortuje wieszchołki topologicznie.\\\\
+Potem używam algorytmu:\\
+Droga(G):\\
+\tab for $0\leq i \leq G.ilość_wieszchołków$\\
+\tab\tab jeśli żadna krwędź nie wchodzi do wieszchoka to\\
+\tab\tab\tab pozycja[i] = 0\\
+\tab\tab\tab ojciec[i] = $null$\\
+\tab\tab w przeciwnym przypadku\\
+\tab\tab\tab sąsiad[]\\
+\tab\tab\tab dla każdego wieszchołka m, takiego, że intnieje krawędź z m do następnego wieszchołka\\
+\tab\tab\tab\tab dodaj do sąsiad[(m, pozycja[m])]\\
+\tab\tab\tab max = max\_po\_drugim\_elemencie(sąsiada)\\
+\tab\tab\tab ojciec[i] = max[0]\\
+\tab\tab\tab pozycja[i] = max[1]+1\\
+\tab ścieżka=[]\\
+\tab koniec = 0\\
+\tab maks  = 0\\
+\tab for $0 \leq i \leq G.ilość_wieszchołków$\\
+\tab\tab jeśli pozycja[i] > maks\\
+\tab\tab\tab koniec = i\\
+\tab\tab\tab maks = pozycja[i]\\\\
+\end{document}

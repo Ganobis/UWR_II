@@ -1,0 +1,54 @@
+\documentclass{article}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+%\usepackage{pgfplots}
+%\usepackage[OT4,plmath]
+\usepackage{epstopdf}
+\usepackage{amsmath,amssymb,amsfonts,amsthm}
+\usepackage[utf8]{inputenc}
+%\usepackage[english]{babel}
+\newcommand\tab[1][1cm]{\hspace*{#1}}
+\usepackage{hyperref}
+\usepackage{color}
+\usepackage{algorithm2e}
+\usepackage[margin=1.25in]{geometry}
+\usepackage[figurename=Wykres]{caption}
+\DeclareMathSizes{12}{30}{16}{12}
+%\usepackage[scaled=1.5]{helvet}
+
+\title{Lista 0, Zadanie 7}
+\author{Wojciech Ganobis 310519}
+\date{20/05/20}
+
+\begin{document}
+\maketitle
+
+Idea: Do każdego wieszchołka w naszym drzewie dopisujemy czas wejśća oraz wyjścia DFS. Teraz mamy z definicji DFS'a wiemy, że jeśli czas wejścia $u \leq$ czas wejścia $v$ i czas wyjścia $u \leq$ czas wyjścia $v$ to $u$ należy do drzewa $v$.\\
+
+Algorytm:\\
+
+DFS(graf G):\\
+\tab	czas =0;\\
+\tab	ustaw wszystkie weiszchołki czas wejścia na $null$\\
+\tab	odwiedź(korzeń, czas)\\
+\\
+Odwiedź($u$, czas):\\
+\tab	czas wejścia = czas\\
+\tab	dla każdego wieszchołka $v$ na liście sąsiedźtwa:\\
+\tab\tab		jeśli($v$ czas wejścia == $null$) to\\
+\tab\tab\tab			czas += 1\\
+\tab\tab\tab			czas = Odwiedź($v$, czas)\\
+\tab\tab	czas wyjścia = czas\\
+\tab	return czas\\
+\\
+CzyLeży($v, u$):\\
+\tab	jeśli(czas wejścia$u \leq$ cas wejścia $v \wedge$ czas wyjścia $u \leq$ czas wyjścia $v$)\\
+\tab\tab		return T\\
+\tab	else\\
+\tab\tab		return F\\
+\\
+
+Czas działania algorytmu to czas dziaania DFS + O(1). Wiemy, że DFS jest najszybszym algorytmem przeszukiwania dzew(lub należy do najszybszysz inny taki algorytm to BFS), więc nie można wykonać tego działania szybciej.
+
+
+\end{document}
