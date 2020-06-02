@@ -63,9 +63,9 @@ class zad5
                     Zajecia lista = new Zajecia();
 
                     XmlNode dziecko = node["ListaZajęć"];
-                    foreach (XmlNode inner in dziecko)
+                    foreach (XmlNode temp in dziecko)
                     {
-                        lista.PrzedmiotOcena.Add(inner["Nazwa"].InnerXml, inner["Ocena"].InnerXml);
+                        lista.PrzedmiotOcena.Add(temp["Nazwa"].InnerXml, temp["Ocena"].InnerXml);
                     }
 
                     Student nowy = new Student(imie, nazwisko, data, AdresStaly, AdresTymczasowy, lista);

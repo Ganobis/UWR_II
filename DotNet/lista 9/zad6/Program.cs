@@ -21,10 +21,9 @@ namespace zad6
                         Console.WriteLine();
                 }
             }
-            finally
+            catch (Exception ex)
             {
-                if (reader != null)
-                    reader.Close();
+                Console.WriteLine(ex.Message);
             }
         }
     }
