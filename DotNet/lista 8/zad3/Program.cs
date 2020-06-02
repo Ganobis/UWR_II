@@ -14,26 +14,25 @@ namespace zad3
         static void Main(string[] args)
         {
             try{
-                using (var context = new SampleDataContext(@"server=DESKTOP-HU8F36I\SQLEXPRESS;database=zad2;integrated security=true") )
+                using (var context = new SampleDataContext(@"server=DESKTOP-E7580\SQLEXPRESS;database=zad2;integrated security=true") )
                 {
-                    //Usuwanie
-                    var usum = context.Student.Where(p => p.Imię.StartsWith("Ala"));
-                    Student susun = usum.FirstOrDefault();
-                    context.Student.DeleteOnSubmit(susun);
-                    //Dodawanie
+                	//Dodawanie rekordu do bazy danych
                     Student nowy = new Student();
-                    nowy.Imię = "Celina";
-                    nowy.Nazwisko = "Cabacka";
+                    nowy.Imię = "Alina";
+                    nowy.Nazwisko = "Abacka";
                     Miejscowosc temp = new Miejscowosc();
-                    temp.Nazwa = "Ciechocinek";
+                    temp.Nazwa = "Bielsko";
                     nowy.Miejscowosc = temp;
                     nowy.DataUrodzenia = new DateTime(2000,1,1);
                     context.Student.InsertOnSubmit(nowy);
+                    //Usuwanie rekordu z bazy danych
+                    var usum = context.Student.Where(p => p.Imię.StartsWith("Basia"));
+                    Student susun = usum.FirstOrDefault();
+                    context.Student.DeleteOnSubmit(susun);
                     //Modyfikacja
                     var zmianamiasta = context.Student.Where(p => p.Imię.StartsWith("Danuta"));
                     Student szmiana = zmianamiasta.FirstOrDefault();
                     szmiana.Miejscowosc = context.Miejscowosc.Where(m => m.Nazwa.StartsWith("Poznan")).FirstOrDefault();
-
                     context.SubmitChanges();
                 }
             }
