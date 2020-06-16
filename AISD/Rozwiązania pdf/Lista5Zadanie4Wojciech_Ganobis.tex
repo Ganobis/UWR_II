@@ -1,0 +1,39 @@
+\documentclass{article}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+%\usepackage{pgfplots}
+%\usepackage[OT4,plmath]
+\usepackage{epstopdf}
+\usepackage{amsmath,amssymb,amsfonts,amsthm}
+\usepackage[utf8]{inputenc}
+%\usepackage[english]{babel}
+\newcommand\tab[1][1cm]{\hspace*{#1}}
+\usepackage{hyperref}
+\usepackage{color}
+\usepackage{algorithm2e}
+\usepackage[margin=1.25in]{geometry}
+\usepackage[figurename=Wykres]{caption}
+\DeclareMathSizes{12}{30}{16}{12}
+%\usepackage[scaled=1.5]{helvet}
+
+\title{Lista 5, Zadanie 4}
+\author{Wojciech Ganobis 310519}
+\date{13/06/20}
+
+\begin{document}
+\maketitle
+
+Mamy dwa ciągi w postaci:\\
+- $X = x_1, x_2, x_3, ..., x_n$\\
+- $Y = y_1, y_2, y_3, ..., y_n$\\
+Z tych dwóch ciągów tworzymy jeden wspólny w postaci:\\
+$$Z_1 = x_1, y_1, x_2, y_2, ..., x_n, y_n$$
+Teraz tworzeymy kolejne ciągi przez zamienianie elementów $z_i$ oraz $z_{i+1}$ (gdzie $i \in \{1, 2, ..., 2n-1\}$). Takich zmian w ciągu o długości $2n$ można wykonać $2n-1$ razy. Czyli w sumie mamy $2n$ ciągów.\\
+
+Teraz mając $2n$ ciągów będziemy pytać adwersarza.Wiemy, że aby otrzymać odpowiedź musi pozostać nam dokładnie jeden ciąg $Z$. Mając $2n$ możliwych zestawów, musimy udowodnić, że zapytanie usuwa conajwyżej jeden ciąg $Z$.\\
+
+Jedyne sensowne zapytania to "jak $x_i$ jest w stosunku do $y_j$".\\
+Eliminacja odbywa się tylko wtedy gdy:\\
+\tab - $i = j$. 
+
+\end{document}

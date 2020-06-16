@@ -1,0 +1,45 @@
+\documentclass{article}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+%\usepackage{pgfplots}
+%\usepackage[OT4,plmath]
+\usepackage{epstopdf}
+\usepackage{amsmath,amssymb,amsfonts,amsthm}
+\usepackage[utf8]{inputenc}
+%\usepackage[english]{babel}
+\newcommand\tab[1][1cm]{\hspace*{#1}}
+\usepackage{hyperref}
+\usepackage{color}
+\usepackage{algorithm2e}
+\usepackage[margin=1.25in]{geometry}
+\usepackage[figurename=Wykres]{caption}
+\DeclareMathSizes{12}{30}{16}{12}
+%\usepackage[scaled=1.5]{helvet}
+
+\title{Lista 6, Zadanie 4}
+\author{Wojciech Ganobis 310519}
+\date{13/06/20}
+
+\begin{document}
+\maketitle
+ Nasza tablica będzie miała tylko elementy 1, 2 lub 3. Można więc prosto przesortować ją idąc pokolei po elementach wrzucając jedynki na przód lub wyrzucając trójki na koniec. Nasz algorytm będzie wyglądał następująco:\\
+Dane:
+\begin{itemize}
+\item $T$ - tablica
+\item $n$ - liczba elementów tablicy
+\end{itemize}
+$Alg(T, n)$:\\
+\tab $n--$\\
+\tab $a , b = 0$ (a oznacza elementy po których występuje tylko 2 lub 3, nastomiast b oznacza te elementy po których występuje tylko 3)\\
+\tab dopóki $b < n$\\
+\tab \tab jeśli $T[b] == 1$:\\
+\tab \tab \tab $swap(T[a], T[b])$\\
+\tab \tab \tab $a++, b++$\\
+\tab \tab w przeciwynm przypadku jeśli $T[b] == 2$\\
+\tab \tab \tab $b++$\\
+\tab \tab w przeciwnym przypadku\\
+\tab \tab \tab $swap(T[b], T[n])$\\
+\tab \tab \tab $n--$\\
+
+Po takim przejściu tablica jest posortowana. Złożoność algorytmu to $O(n)$, ponieważ przez każdy element tablicy przechodzimy raz.
+\end{document}

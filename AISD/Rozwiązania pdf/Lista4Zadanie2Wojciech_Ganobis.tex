@@ -1,0 +1,42 @@
+\documentclass{article}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+%\usepackage{pgfplots}
+%\usepackage[OT4,plmath]
+\usepackage{epstopdf}
+\usepackage{amsmath,amssymb,amsfonts,amsthm}
+\usepackage[utf8]{inputenc}
+%\usepackage[english]{babel}
+\newcommand\tab[1][1cm]{\hspace*{#1}}
+\usepackage{hyperref}
+\usepackage{color}
+\usepackage{algorithm2e}
+\usepackage[margin=1.25in]{geometry}
+\usepackage[figurename=Wykres]{caption}
+\DeclareMathSizes{12}{30}{16}{12}
+%\usepackage[scaled=1.5]{helvet}
+
+\title{Lista 4, Zadanie 2}
+\author{Wojciech Ganobis 310519}
+\date{13/06/20}
+
+\begin{document}
+\maketitle
+Nasze rozwiązanie będzie podobne do tego z wykładu, jedyne co będzie inne to to, że możmy przyjśc do jakigoś pola z góry lub dołu.
+
+Oznaczenia:\\
+\begin{itemize}
+\item wartość - wartość pola
+\item koszt - minimalny koszt
+\end{itemize}
+Pierwszą kolumnę wypełniamy wartościamu pól.\\
+Dla każdej kolejnej kolumny obliczmy koszty w następujący sposób:\\
+\tab koszt(i,j) = min\{ koszt( i+1, j-1), koszt( i, j-1 ), koszt( i-1, j-1 ) \} + wartość[i,j]\\
+Uwzględniamy także przejścia z góry i dołu:\\
+\tab koszt( i, j ) = min\{ koszt( i, j ), ( koszt( i-1, j ) + wartosc[i,j] ), ( koszt( i+1, j ) + wartosc[i,j] ) \}\\
+
+Teraz wyznaczamy ścieżkę. Bierzemy najmniejszą wartość z ostatniej komlumny, potem idziemy najmniejszymi wartościami z pól z których mogliśmy przyjść.
+
+Złożoność $O(nm)$, ponieważ wykonujemy $m$ pętli, gdzie każda ma złożoność $n$.
+
+\end{document}
