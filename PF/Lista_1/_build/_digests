@@ -1,0 +1,5 @@
+"Resource: /home/wojciech/Pulpit/UWR_II/PF/Lista_1/pp.ml": "\218\129\134z\007\150\170\156d1\022\239\224\r\130\215"
+"Rule: ocaml: cmx* & o* -> native (%=pp )": "E\n\219\205\188\190\177-\171\158\237\217j\189\161,"
+"Rule: ocaml: ml & cmi -> cmx & o (%=pp )": "\004\217\215\138\rMN>\006\207\196\141\014q\237H"
+"Rule: ocaml: ml -> cmo & cmi (%=pp )": "\184\160w\174\190{\1702e\224\021\161Tp\161\239"
+"Rule: ocaml dependencies ml (%=pp )": "\027\218RK\229\181\129{\206\168\177|\020Y\254\128"
