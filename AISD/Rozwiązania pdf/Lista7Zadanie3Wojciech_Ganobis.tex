@@ -1,0 +1,28 @@
+\documentclass{article}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+%\usepackage{pgfplots}
+%\usepackage[OT4,plmath]
+\usepackage{epstopdf}
+\usepackage{amsmath,amssymb,amsfonts,amsthm}
+\usepackage[utf8]{inputenc}
+%\usepackage[english]{babel}
+\newcommand\tab[1][1cm]{\hspace*{#1}}
+\usepackage{hyperref}
+\usepackage{color}
+\usepackage{algorithm2e}
+\usepackage[margin=1.25in]{geometry}
+\usepackage[figurename=Wykres]{caption}
+\DeclareMathSizes{12}{30}{16}{12}
+%\usepackage[scaled=1.5]{helvet}
+
+\title{Lista 7, Zadanie 3}
+\author{Wojciech Ganobis 310519}
+\date{13/06/20}
+
+\begin{document}
+\maketitle
+W tym zadaniu mamy $n$ kluczy oraz $n$ tablic. Określmy sobie $X_i$ jako zmienną losową określającą czy tablica numer $i$ jest pusta. Prawdopodobieństwo takiego zdażenia dla pojedynczego klucza to $$\frac{n-1}{n}.$$ Jeśli mamy $n$ kluczy to prawdopodobieństwo będzie wynosić $$(\frac{n-1}{n})^{n}.$$ Teraz obliczmy to dla $n$ list, czyli wystarczy zrobić sumę prawdopodobieństw
+$$\sum_{i=1}^{n}(\frac{n-1}{n})^{n} = n \cdot (\frac{n-1}{n})^{n} = n \cdot (1-\frac{1}{n})^{n} = ne^{-1} = \frac{n}{e}$$
+
+\end{document}

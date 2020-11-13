@@ -1,0 +1,46 @@
+\documentclass{article}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+%\usepackage{pgfplots}
+%\usepackage[OT4,plmath]
+\usepackage{epstopdf}
+\usepackage{amsmath,amssymb,amsfonts,amsthm}
+\usepackage[utf8]{inputenc}
+%\usepackage[english]{babel}
+\newcommand\tab[1][1cm]{\hspace*{#1}}
+\usepackage{hyperref}
+\usepackage{color}
+\usepackage{algorithm2e}
+\usepackage[margin=1.25in]{geometry}
+\usepackage[figurename=Wykres]{caption}
+\DeclareMathSizes{12}{30}{16}{12}
+%\usepackage[scaled=1.5]{helvet}
+
+\title{Lista 3, Zadanie 8}
+\author{Wojciech Ganobis 310519}
+\date{13/06/20}
+
+\begin{document}
+\maketitle
+
+W zadaniu dostaje dwie uporządkowanie niemalejąco tablice $T_{1}$ oraz $T_{2}$. Mamy znaleźć medianę dla wielozbioru powstałego z połączenia tych dwóch tablic. Liczba elementów w naszych tablicach jest równa $n$.\\
+
+Oznaczmy sobie:\\
+-$x$ jako mediane zbioru $T_{1}$\\
+-$y$ jako mediane zbioru $T_{2}$\\
+
+Jeśli $x < y$ to:\\
+\tab Usuwamy z tablicy $T_1$  wszystkie elementy które są "poniżej" pozycji $x$, a z tablicy $T_2$  usuwamy $ceil(\frac{n}2) - 1$ "ostatnich elementów"\\
+W przeciwnym porzypadku tablice zmniejszamy odwrotnie.\\
+
+Wykonujemy działanie dopóki nasze tablice nie będą miały rozmiaru $4$ lub mniejszego. Wtedy znajdujemy mediane dwóch tablic metodą:(k to liczba posostałych elementów w tablicy)\\
+\tab \tab 1. Wybieramy najmniejszy element z 2 tablic i usuwamy go.\\
+\tab \tab 2. $k--$\\
+\tab \tab 3.  Jeśli $k == 0$ to zwróć ostani usuniety element.\\
+\tab \tab 4. Wróć do 1.\\
+
+Nasz algorym działa w czasie $log(n)$(poza końcówką, która wykona maksymalnie 4 powtórzeniai więc nie biorę jej pod uwagę), ponieważ za każdym razem zmniejszamy tablice o połowę.
+
+
+
+\end{document}
