@@ -1,0 +1,1 @@
+instanceof sprawdza czy dany obiekt jest obiektem określonego typu, natomiast typeof zwraca łańcuch zawierający typ. 
