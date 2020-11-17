@@ -1,15 +1,16 @@
 function Foo() {
-    console.log('Foo');
+    console.log('Foo')
 }
 
 Foo.prototype.Bar = function() {
     function Qux() {
-        console.log('Qux');
+        console.log('Qux')
     }
     Qux();
-    console.log('Bar');
+    console.log('Bar')
 }
 
-const f = new Foo();
+const f = new Foo()
 console.log("XXX")
-f.Bar();
+f.Bar()
+f.Qux() //error
