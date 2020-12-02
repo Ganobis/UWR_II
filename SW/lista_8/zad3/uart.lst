@@ -1,0 +1,239 @@
+   1               		.file	"uart.c"
+   2               	__SP_H__ = 0x3e
+   3               	__SP_L__ = 0x3d
+   4               	__SREG__ = 0x3f
+   5               	__tmp_reg__ = 0
+   6               	__zero_reg__ = 1
+   9               		.text
+  10               	.Ltext0:
+ 189               	.global	uart_transmit
+ 191               	uart_transmit:
+ 192               		.stabd	46,0,0
+   1:uart.c        **** #include "FreeRTOS.h"
+   2:uart.c        **** #include "task.h"
+   3:uart.c        **** #include <avr/io.h>
+   4:uart.c        **** #include <stdio.h>
+   5:uart.c        **** #include "uart.h"
+   6:uart.c        **** #include "queue.h"
+   7:uart.c        **** #ifndef F_CPU
+   8:uart.c        **** #define F_CPU 16000000UL
+   9:uart.c        **** #endif
+  10:uart.c        **** #ifndef BAUD
+  11:uart.c        **** #define BAUD 9600
+  12:uart.c        **** #endif
+  13:uart.c        **** #include <util/setbaud.h>
+  14:uart.c        **** 
+  15:uart.c        **** int uart_transmit(char c, FILE *stream);
+  16:uart.c        **** int uart_receive(FILE *stream);
+  17:uart.c        **** 
+  18:uart.c        **** FILE uart_file = FDEV_SETUP_STREAM(uart_transmit, uart_receive, _FDEV_SETUP_RW);
+  19:uart.c        **** 
+  20:uart.c        **** void uart_init() {
+  21:uart.c        ****   bufor_in = xQueueCreate(100, sizeof(char));
+  22:uart.c        ****   bufor_out = xQueueCreate(100, sizeof(char));
+  23:uart.c        **** 
+  24:uart.c        ****   UBRR0H = UBRRH_VALUE;
+  25:uart.c        ****   UBRR0L = UBRRL_VALUE;
+  26:uart.c        **** #if USE_2X
+  27:uart.c        ****   UCSR0A |= _BV(U2X0);
+  28:uart.c        **** #else
+  29:uart.c        ****   UCSR0A &= ~(_BV(U2X0));
+  30:uart.c        **** #endif
+  31:uart.c        ****   UCSR0C = _BV(UCSZ01) | _BV(UCSZ00); /* 8-bit data */
+  32:uart.c        ****   UCSR0B = _BV(RXEN0) | _BV(TXEN0) | _BV(RXCIE0) | _BV(UDRIE0); /* Enable RX and TX odpala r√≥wnie≈
+  33:uart.c        **** }
+  34:uart.c        **** 
+  35:uart.c        **** int uart_transmit(char c, FILE *stream) {
+ 194               	.LM0:
+ 195               	.LFBB1:
+ 196 0000 CF93      		push r28
+ 197 0002 DF93      		push r29
+ 198 0004 1F92      		push __zero_reg__
+ 199 0006 CDB7      		in r28,__SP_L__
+ 200 0008 DEB7      		in r29,__SP_H__
+ 201               	/* prologue: function */
+ 202               	/* frame size = 1 */
+ 203               	/* stack size = 3 */
+ 204               	.L__stack_usage = 3
+ 205 000a 8983      		std Y+1,r24
+  36:uart.c        ****   if (uxQueueSpacesAvailable(bufor_out) == 0) {
+ 207               	.LM1:
+ 208 000c 8091 0000 		lds r24,bufor_out
+ 209 0010 9091 0000 		lds r25,bufor_out+1
+ 210 0014 0E94 0000 		call uxQueueSpacesAvailable
+ 211 0018 8111      		cpse r24,__zero_reg__
+ 212 001a 00C0      		rjmp .L2
+ 213               	.L3:
+  37:uart.c        ****       while (!(UCSR0A & _BV(UDRE0)));
+ 215               	.LM2:
+ 216 001c 8091 C000 		lds r24,192
+ 217 0020 85FF      		sbrs r24,5
+ 218 0022 00C0      		rjmp .L3
+ 219               	.L2:
+  38:uart.c        ****   }
+  39:uart.c        ****   xQueueSendFromISR(bufor_out, (void*)&c, NULL);
+ 221               	.LM3:
+ 222 0024 20E0      		ldi r18,0
+ 223 0026 40E0      		ldi r20,0
+ 224 0028 50E0      		ldi r21,0
+ 225 002a BE01      		movw r22,r28
+ 226 002c 6F5F      		subi r22,-1
+ 227 002e 7F4F      		sbci r23,-1
+ 228 0030 8091 0000 		lds r24,bufor_out
+ 229 0034 9091 0000 		lds r25,bufor_out+1
+ 230 0038 0E94 0000 		call xQueueGenericSendFromISR
+  40:uart.c        ****   return 0;
+  41:uart.c        **** }
+ 232               	.LM4:
+ 233 003c 80E0      		ldi r24,0
+ 234 003e 90E0      		ldi r25,0
+ 235               	/* epilogue start */
+ 236 0040 0F90      		pop __tmp_reg__
+ 237 0042 DF91      		pop r29
+ 238 0044 CF91      		pop r28
+ 239 0046 0895      		ret
+ 241               	.Lscope1:
+ 243               		.stabd	78,0,0
+ 246               	.global	uart_receive
+ 248               	uart_receive:
+ 249               		.stabd	46,0,0
+  42:uart.c        **** 
+  43:uart.c        **** int uart_receive(FILE *stream) {
+ 251               	.LM5:
+ 252               	.LFBB2:
+ 253 0048 CF93      		push r28
+ 254 004a DF93      		push r29
+ 255 004c 1F92      		push __zero_reg__
+ 256 004e CDB7      		in r28,__SP_L__
+ 257 0050 DEB7      		in r29,__SP_H__
+ 258               	/* prologue: function */
+ 259               	/* frame size = 1 */
+ 260               	/* stack size = 3 */
+ 261               	.L__stack_usage = 3
+  44:uart.c        ****   uint8_t value = 0;
+ 263               	.LM6:
+ 264 0052 1982      		std Y+1,__zero_reg__
+ 265               	.L8:
+  45:uart.c        ****   while (xQueueReceiveFromISR(bufor_in, (void*)&value, NULL) == pdFALSE){
+ 267               	.LM7:
+ 268 0054 40E0      		ldi r20,0
+ 269 0056 50E0      		ldi r21,0
+ 270 0058 BE01      		movw r22,r28
+ 271 005a 6F5F      		subi r22,-1
+ 272 005c 7F4F      		sbci r23,-1
+ 273 005e 8091 0000 		lds r24,bufor_in
+ 274 0062 9091 0000 		lds r25,bufor_in+1
+ 275 0066 0E94 0000 		call xQueueReceiveFromISR
+ 276 006a 8111      		cpse r24,__zero_reg__
+ 277 006c 00C0      		rjmp .L10
+  46:uart.c        ****     vTaskDelay(5 / portTICK_PERIOD_MS);
+ 279               	.LM8:
+ 280 006e 85E0      		ldi r24,lo8(5)
+ 281 0070 90E0      		ldi r25,0
+ 282 0072 0E94 0000 		call vTaskDelay
+ 283 0076 00C0      		rjmp .L8
+ 284               	.L10:
+  47:uart.c        ****   }
+  48:uart.c        ****   return value;
+ 286               	.LM9:
+ 287 0078 8981      		ldd r24,Y+1
+  49:uart.c        **** 
+  50:uart.c        **** }...
+ 289               	.LM10:
+ 290 007a 90E0      		ldi r25,0
+ 291               	/* epilogue start */
+ 292 007c 0F90      		pop __tmp_reg__
+ 293 007e DF91      		pop r29
+ 294 0080 CF91      		pop r28
+ 295 0082 0895      		ret
+ 300               	.Lscope2:
+ 302               		.stabd	78,0,0
+ 304               	.global	uart_init
+ 306               	uart_init:
+ 307               		.stabd	46,0,0
+  20:uart.c        **** void uart_init() {
+ 309               	.LM11:
+ 310               	.LFBB3:
+ 311               	/* prologue: function */
+ 312               	/* frame size = 0 */
+ 313               	/* stack size = 0 */
+ 314               	.L__stack_usage = 0
+  21:uart.c        ****   bufor_in = xQueueCreate(100, sizeof(char));
+ 316               	.LM12:
+ 317 0084 40E0      		ldi r20,0
+ 318 0086 61E0      		ldi r22,lo8(1)
+ 319 0088 84E6      		ldi r24,lo8(100)
+ 320 008a 0E94 0000 		call xQueueGenericCreate
+ 321 008e 9093 0000 		sts bufor_in+1,r25
+ 322 0092 8093 0000 		sts bufor_in,r24
+  22:uart.c        ****   bufor_out = xQueueCreate(100, sizeof(char));
+ 324               	.LM13:
+ 325 0096 40E0      		ldi r20,0
+ 326 0098 61E0      		ldi r22,lo8(1)
+ 327 009a 84E6      		ldi r24,lo8(100)
+ 328 009c 0E94 0000 		call xQueueGenericCreate
+ 329 00a0 9093 0000 		sts bufor_out+1,r25
+ 330 00a4 8093 0000 		sts bufor_out,r24
+  24:uart.c        ****   UBRR0H = UBRRH_VALUE;
+ 332               	.LM14:
+ 333 00a8 1092 C500 		sts 197,__zero_reg__
+  25:uart.c        ****   UBRR0L = UBRRL_VALUE;
+ 335               	.LM15:
+ 336 00ac 87E6      		ldi r24,lo8(103)
+ 337 00ae 8093 C400 		sts 196,r24
+  29:uart.c        ****   UCSR0A &= ~(_BV(U2X0));
+ 339               	.LM16:
+ 340 00b2 E0EC      		ldi r30,lo8(-64)
+ 341 00b4 F0E0      		ldi r31,0
+ 342 00b6 8081      		ld r24,Z
+ 343 00b8 8D7F      		andi r24,lo8(-3)
+ 344 00ba 8083      		st Z,r24
+  31:uart.c        ****   UCSR0C = _BV(UCSZ01) | _BV(UCSZ00); /* 8-bit data */
+ 346               	.LM17:
+ 347 00bc 86E0      		ldi r24,lo8(6)
+ 348 00be 8093 C200 		sts 194,r24
+  32:uart.c        ****   UCSR0B = _BV(RXEN0) | _BV(TXEN0) | _BV(RXCIE0) | _BV(UDRIE0); /* Enable RX and TX odpala r√≥wnie≈
+ 350               	.LM18:
+ 351 00c2 88EB      		ldi r24,lo8(-72)
+ 352 00c4 8093 C100 		sts 193,r24
+ 353 00c8 0895      		ret
+ 355               	.Lscope3:
+ 357               		.stabd	78,0,0
+ 358               		.comm	bufor_out,2,1
+ 359               		.comm	bufor_in,2,1
+ 360               	.global	uart_file
+ 361               		.data
+ 364               	uart_file:
+ 365 0000 0000 00   		.zero	3
+ 366 0003 03        		.byte	3
+ 367 0004 0000 0000 		.zero	4
+ 368 0008 0000      		.word	gs(uart_transmit)
+ 369 000a 0000      		.word	gs(uart_receive)
+ 370 000c 0000      		.word	0
+ 374               		.text
+ 376               	.Letext0:
+ 377               		.ident	"GCC: (GNU) 5.4.0"
+ 378               	.global __do_copy_data
+ 379               	.global __do_clear_bss
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 uart.c
+     /tmp/ccEy4oGe.s:2      *ABS*:000000000000003e __SP_H__
+     /tmp/ccEy4oGe.s:3      *ABS*:000000000000003d __SP_L__
+     /tmp/ccEy4oGe.s:4      *ABS*:000000000000003f __SREG__
+     /tmp/ccEy4oGe.s:5      *ABS*:0000000000000000 __tmp_reg__
+     /tmp/ccEy4oGe.s:6      *ABS*:0000000000000001 __zero_reg__
+     /tmp/ccEy4oGe.s:191    .text:0000000000000000 uart_transmit
+                            *COM*:0000000000000002 bufor_out
+     /tmp/ccEy4oGe.s:248    .text:0000000000000048 uart_receive
+                            *COM*:0000000000000002 bufor_in
+     /tmp/ccEy4oGe.s:306    .text:0000000000000084 uart_init
+     /tmp/ccEy4oGe.s:364    .data:0000000000000000 uart_file
+
+UNDEFINED SYMBOLS
+uxQueueSpacesAvailable
+xQueueGenericSendFromISR
+xQueueReceiveFromISR
+vTaskDelay
+xQueueGenericCreate
+__do_copy_data
+__do_clear_bss

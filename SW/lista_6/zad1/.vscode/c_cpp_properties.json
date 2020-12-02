@@ -1,0 +1,26 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "/usr/avr/include"
+            ],
+            "defines": [
+                "__AVR_ATtiny2313A__",
+                "__AVR_ATmega328P__"
+            ],
+            "compilerPath": "/usr/bin/clang",
+            "cStandard": "c11",
+            "cppStandard": "c++14",
+            "intelliSenseMode": "gcc-x64",
+            "browse": {
+                "path": [
+                    "/usr/avr/",
+                    "/usr/lib/gcc/avr/10.2.0/"
+                ]
+            }
+        }
+    ],
+    "version": 4
+}

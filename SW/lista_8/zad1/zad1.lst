@@ -1,0 +1,446 @@
+   1               		.file	"zad1.c"
+   2               	__SP_H__ = 0x3e
+   3               	__SP_L__ = 0x3d
+   4               	__SREG__ = 0x3f
+   5               	__tmp_reg__ = 0
+   6               	__zero_reg__ = 1
+   9               		.text
+  10               	.Ltext0:
+ 182               	vDrabinka:
+ 183               		.stabd	46,0,0
+   1:zad1.c        **** /******************************************************************************
+   2:zad1.c        ****  * Header file inclusions.
+   3:zad1.c        ****  ******************************************************************************/
+   4:zad1.c        **** 
+   5:zad1.c        **** #include "FreeRTOS.h"
+   6:zad1.c        **** #include "task.h"
+   7:zad1.c        **** 
+   8:zad1.c        **** #include <avr/io.h>
+   9:zad1.c        **** 
+  10:zad1.c        **** 
+  11:zad1.c        **** #include <stdio.h>
+  12:zad1.c        **** #include "uart.h"
+  13:zad1.c        **** 
+  14:zad1.c        **** #define LED PB5
+  15:zad1.c        **** #define LED_DDR DDRB
+  16:zad1.c        **** #define LED_PORT PORTB
+  17:zad1.c        **** 
+  18:zad1.c        **** #define BTN PB4
+  19:zad1.c        **** #define BTN_PIN PINB
+  20:zad1.c        **** #define BTN_PORT PORTB
+  21:zad1.c        **** 
+  22:zad1.c        **** #define LED_DDR_D DDRD
+  23:zad1.c        **** #define LED_PORT_D PORTD
+  24:zad1.c        **** 
+  25:zad1.c        **** /******************************************************************************
+  26:zad1.c        ****  * Private macro definitions.
+  27:zad1.c        ****  ******************************************************************************/
+  28:zad1.c        **** 
+  29:zad1.c        **** #define mainSEKUNDA_TASK_PRIORITY   2
+  30:zad1.c        **** 
+  31:zad1.c        **** #define mainDRABINKA_TASK_PRIORITY 1
+  32:zad1.c        **** 
+  33:zad1.c        **** /******************************************************************************
+  34:zad1.c        ****  * Private function prototypes.
+  35:zad1.c        ****  ******************************************************************************/
+  36:zad1.c        **** 
+  37:zad1.c        **** static void vSekunda(void* pvParameters);
+  38:zad1.c        **** 
+  39:zad1.c        **** static void vDrabinka(void* pvParameters);
+  40:zad1.c        **** 
+  41:zad1.c        **** int press_memory[101];
+  42:zad1.c        **** int counter;
+  43:zad1.c        **** 
+  44:zad1.c        **** /******************************************************************************
+  45:zad1.c        ****  * Public function definitions.
+  46:zad1.c        ****  ******************************************************************************/
+  47:zad1.c        **** 
+  48:zad1.c        **** /**************************************************************************//**
+  49:zad1.c        ****  * \fn int main(void)
+  50:zad1.c        ****  *
+  51:zad1.c        ****  * \brief Main function.
+  52:zad1.c        ****  *
+  53:zad1.c        ****  * \return
+  54:zad1.c        ****  ******************************************************************************/
+  55:zad1.c        **** int main(void)
+  56:zad1.c        **** {
+  57:zad1.c        **** 	for (int i = 0; i < 101; ++i)
+  58:zad1.c        **** 	{
+  59:zad1.c        **** 			press_memory[i] = 0;
+  60:zad1.c        **** 	}
+  61:zad1.c        **** 	// Create task.
+  62:zad1.c        **** 	xTaskHandle sekunda_handle;
+  63:zad1.c        **** 	xTaskHandle drabinka_handle;
+  64:zad1.c        **** 		xTaskCreate
+  65:zad1.c        **** 			(
+  66:zad1.c        **** 			 vSekunda,
+  67:zad1.c        **** 			 "sekunda",
+  68:zad1.c        **** 			 configMINIMAL_STACK_SIZE,
+  69:zad1.c        **** 			 NULL,
+  70:zad1.c        **** 			 mainSEKUNDA_TASK_PRIORITY,
+  71:zad1.c        **** 			 &sekunda_handle
+  72:zad1.c        **** 			);
+  73:zad1.c        **** 		xTaskCreate
+  74:zad1.c        **** 			(
+  75:zad1.c        **** 			 vDrabinka,
+  76:zad1.c        **** 			 "drabinka",
+  77:zad1.c        **** 			 configMINIMAL_STACK_SIZE,
+  78:zad1.c        **** 			 NULL,
+  79:zad1.c        **** 			 mainDRABINKA_TASK_PRIORITY,
+  80:zad1.c        **** 			 &drabinka_handle
+  81:zad1.c        **** 			);
+  82:zad1.c        **** 		// Start scheduler.
+  83:zad1.c        **** 	vTaskStartScheduler();
+  84:zad1.c        **** 		return 0;
+  85:zad1.c        **** }
+  86:zad1.c        **** 
+  87:zad1.c        **** /**************************************************************************//**
+  88:zad1.c        ****  * \fn static vApplicationIdleHook(void)
+  89:zad1.c        ****  *
+  90:zad1.c        ****  * \brief
+  91:zad1.c        ****  ******************************************************************************/
+  92:zad1.c        **** void vApplicationIdleHook(void)
+  93:zad1.c        **** {
+  94:zad1.c        **** 
+  95:zad1.c        **** }
+  96:zad1.c        **** 
+  97:zad1.c        **** /******************************************************************************
+  98:zad1.c        ****  * Private function definitions.
+  99:zad1.c        ****  ******************************************************************************/
+ 100:zad1.c        **** 
+ 101:zad1.c        **** static void vSekunda(void* pvParameters)
+ 102:zad1.c        **** {
+ 103:zad1.c        **** 	BTN_PORT |= _BV(BTN);
+ 104:zad1.c        **** 	LED_DDR |= _BV(LED);
+ 105:zad1.c        **** 	while(1)
+ 106:zad1.c        **** 	{
+ 107:zad1.c        **** 		if (BTN_PIN & _BV(BTN))
+ 108:zad1.c        **** 			press_memory[counter] = 1;
+ 109:zad1.c        **** 		else
+ 110:zad1.c        **** 			press_memory[counter] = 0;
+ 111:zad1.c        **** 		if (press_memory[(counter + 1) % 101])
+ 112:zad1.c        **** 			LED_PORT &= ~_BV(LED);
+ 113:zad1.c        **** 		else
+ 114:zad1.c        **** 			LED_PORT |= _BV(LED);
+ 115:zad1.c        **** 		vTaskDelay(10 / portTICK_PERIOD_MS);
+ 116:zad1.c        **** 		counter++;
+ 117:zad1.c        **** 		if (counter >= 101)
+ 118:zad1.c        **** 		 counter = 0;
+ 119:zad1.c        **** 			vTaskDelay(10 / portTICK_PERIOD_MS);
+ 120:zad1.c        **** 	}
+ 121:zad1.c        **** }
+ 122:zad1.c        **** 
+ 123:zad1.c        **** 
+ 124:zad1.c        **** static void vDrabinka(void* pvParameters)
+ 125:zad1.c        **** {
+ 185               	.LM0:
+ 186               	.LFBB1:
+ 187               	/* prologue: function */
+ 188               	/* frame size = 0 */
+ 189               	/* stack size = 0 */
+ 190               	.L__stack_usage = 0
+ 126:zad1.c        **** 	UCSR0B &= ~_BV(RXEN0) & ~_BV(TXEN0);
+ 192               	.LM1:
+ 193 0000 8091 C100 		lds r24,193
+ 194 0004 877E      		andi r24,lo8(-25)
+ 195 0006 8093 C100 		sts 193,r24
+ 127:zad1.c        **** 	LED_DDR_D |= 0b11111111;
+ 197               	.LM2:
+ 198 000a 8AB1      		in r24,0xa
+ 199 000c 8FEF      		ldi r24,lo8(-1)
+ 200 000e 8AB9      		out 0xa,r24
+ 128:zad1.c        **** 	while(1){
+ 129:zad1.c        **** 		LED_PORT_D = 0b00000001;
+ 202               	.LM3:
+ 203 0010 11E0      		ldi r17,lo8(1)
+ 204               	.L4:
+ 205 0012 1BB9      		out 0xb,r17
+ 206 0014 C7E0      		ldi r28,lo8(7)
+ 207 0016 D0E0      		ldi r29,0
+ 208               	.L2:
+ 209               	.LBB2:
+ 130:zad1.c        **** 		for (int i = 0; i < 7; ++i)
+ 131:zad1.c        **** 		{
+ 132:zad1.c        **** 			LED_PORT_D = (LED_PORT_D << 1);
+ 211               	.LM4:
+ 212 0018 8BB1      		in r24,0xb
+ 213 001a 880F      		lsl r24
+ 214 001c 8BB9      		out 0xb,r24
+ 133:zad1.c        **** 			vTaskDelay(50 / portTICK_PERIOD_MS);
+ 216               	.LM5:
+ 217 001e 82E3      		ldi r24,lo8(50)
+ 218 0020 90E0      		ldi r25,0
+ 219 0022 0E94 0000 		call vTaskDelay
+ 220 0026 2197      		sbiw r28,1
+ 130:zad1.c        **** 		for (int i = 0; i < 7; ++i)
+ 222               	.LM6:
+ 223 0028 01F4      		brne .L2
+ 224 002a C7E0      		ldi r28,lo8(7)
+ 225 002c D0E0      		ldi r29,0
+ 226               	.L3:
+ 227               	.LBE2:
+ 228               	.LBB3:
+ 134:zad1.c        **** 		}
+ 135:zad1.c        **** 		for (int i = 0; i < 7; ++i)
+ 136:zad1.c        **** 		{
+ 137:zad1.c        **** 			LED_PORT_D = (LED_PORT_D >> 1);
+ 230               	.LM7:
+ 231 002e 8BB1      		in r24,0xb
+ 232 0030 8695      		lsr r24
+ 233 0032 8BB9      		out 0xb,r24
+ 138:zad1.c        **** 			vTaskDelay(50 / portTICK_PERIOD_MS);
+ 235               	.LM8:
+ 236 0034 82E3      		ldi r24,lo8(50)
+ 237 0036 90E0      		ldi r25,0
+ 238 0038 0E94 0000 		call vTaskDelay
+ 239 003c 2197      		sbiw r28,1
+ 135:zad1.c        **** 		{
+ 241               	.LM9:
+ 242 003e 01F4      		brne .L3
+ 243 0040 00C0      		rjmp .L4
+ 244               	.LBE3:
+ 246               	.Lscope1:
+ 248               		.stabd	78,0,0
+ 252               	vSekunda:
+ 253               		.stabd	46,0,0
+ 102:zad1.c        **** 	BTN_PORT |= _BV(BTN);
+ 255               	.LM10:
+ 256               	.LFBB2:
+ 257               	/* prologue: function */
+ 258               	/* frame size = 0 */
+ 259               	/* stack size = 0 */
+ 260               	.L__stack_usage = 0
+ 103:zad1.c        **** 	LED_DDR |= _BV(LED);
+ 262               	.LM11:
+ 263 0042 2C9A      		sbi 0x5,4
+ 104:zad1.c        **** 	while(1)
+ 265               	.LM12:
+ 266 0044 259A      		sbi 0x4,5
+ 108:zad1.c        **** 		else
+ 268               	.LM13:
+ 269 0046 C1E0      		ldi r28,lo8(1)
+ 270 0048 D0E0      		ldi r29,0
+ 111:zad1.c        **** 			LED_PORT &= ~_BV(LED);
+ 272               	.LM14:
+ 273 004a 05E6      		ldi r16,lo8(101)
+ 274 004c 10E0      		ldi r17,0
+ 275               	.L15:
+ 276 004e 8091 0000 		lds r24,counter
+ 277 0052 9091 0000 		lds r25,counter+1
+ 108:zad1.c        **** 		else
+ 279               	.LM15:
+ 280 0056 FC01      		movw r30,r24
+ 281 0058 EE0F      		lsl r30
+ 282 005a FF1F      		rol r31
+ 283 005c E050      		subi r30,lo8(-(press_memory))
+ 284 005e F040      		sbci r31,hi8(-(press_memory))
+ 107:zad1.c        **** 			press_memory[counter] = 1;
+ 286               	.LM16:
+ 287 0060 1C9B      		sbis 0x3,4
+ 288 0062 00C0      		rjmp .L9
+ 108:zad1.c        **** 		else
+ 290               	.LM17:
+ 291 0064 D183      		std Z+1,r29
+ 292 0066 C083      		st Z,r28
+ 293 0068 00C0      		rjmp .L10
+ 294               	.L9:
+ 110:zad1.c        **** 		if (press_memory[(counter + 1) % 101])
+ 296               	.LM18:
+ 297 006a 1182      		std Z+1,__zero_reg__
+ 298 006c 1082      		st Z,__zero_reg__
+ 299               	.L10:
+ 111:zad1.c        **** 			LED_PORT &= ~_BV(LED);
+ 301               	.LM19:
+ 302 006e 0196      		adiw r24,1
+ 303 0070 B801      		movw r22,r16
+ 304 0072 0E94 0000 		call __divmodhi4
+ 305 0076 FC01      		movw r30,r24
+ 306 0078 EE0F      		lsl r30
+ 307 007a FF1F      		rol r31
+ 308 007c E050      		subi r30,lo8(-(press_memory))
+ 309 007e F040      		sbci r31,hi8(-(press_memory))
+ 310 0080 8081      		ld r24,Z
+ 311 0082 9181      		ldd r25,Z+1
+ 312 0084 892B      		or r24,r25
+ 313 0086 01F0      		breq .L11
+ 112:zad1.c        **** 		else
+ 315               	.LM20:
+ 316 0088 2D98      		cbi 0x5,5
+ 317 008a 00C0      		rjmp .L12
+ 318               	.L11:
+ 114:zad1.c        **** 		vTaskDelay(10 / portTICK_PERIOD_MS);
+ 320               	.LM21:
+ 321 008c 2D9A      		sbi 0x5,5
+ 322               	.L12:
+ 115:zad1.c        **** 		counter++;
+ 324               	.LM22:
+ 325 008e 8AE0      		ldi r24,lo8(10)
+ 326 0090 90E0      		ldi r25,0
+ 327 0092 0E94 0000 		call vTaskDelay
+ 116:zad1.c        **** 		if (counter >= 101)
+ 329               	.LM23:
+ 330 0096 8091 0000 		lds r24,counter
+ 331 009a 9091 0000 		lds r25,counter+1
+ 332 009e 0196      		adiw r24,1
+ 117:zad1.c        **** 		 counter = 0;
+ 334               	.LM24:
+ 335 00a0 8536      		cpi r24,101
+ 336 00a2 9105      		cpc r25,__zero_reg__
+ 337 00a4 04F4      		brge .L13
+ 116:zad1.c        **** 		if (counter >= 101)
+ 339               	.LM25:
+ 340 00a6 9093 0000 		sts counter+1,r25
+ 341 00aa 8093 0000 		sts counter,r24
+ 342 00ae 00C0      		rjmp .L14
+ 343               	.L13:
+ 118:zad1.c        **** 			vTaskDelay(10 / portTICK_PERIOD_MS);
+ 345               	.LM26:
+ 346 00b0 1092 0000 		sts counter+1,__zero_reg__
+ 347 00b4 1092 0000 		sts counter,__zero_reg__
+ 348               	.L14:
+ 119:zad1.c        **** 	}
+ 350               	.LM27:
+ 351 00b8 8AE0      		ldi r24,lo8(10)
+ 352 00ba 90E0      		ldi r25,0
+ 353 00bc 0E94 0000 		call vTaskDelay
+ 120:zad1.c        **** }
+ 355               	.LM28:
+ 356 00c0 00C0      		rjmp .L15
+ 358               	.Lscope2:
+ 360               		.stabd	78,0,0
+ 361               		.section	.rodata.str1.1,"aMS",@progbits,1
+ 362               	.LC0:
+ 363 0000 7365 6B75 		.string	"sekunda"
+ 363      6E64 6100 
+ 364               	.LC1:
+ 365 0008 6472 6162 		.string	"drabinka"
+ 365      696E 6B61 
+ 365      00
+ 366               		.section	.text.startup,"ax",@progbits
+ 368               	.global	main
+ 370               	main:
+ 371               		.stabd	46,0,0
+  56:zad1.c        **** 	for (int i = 0; i < 101; ++i)
+ 373               	.LM29:
+ 374               	.LFBB3:
+ 375 0000 EF92      		push r14
+ 376 0002 FF92      		push r15
+ 377 0004 0F93      		push r16
+ 378 0006 CF93      		push r28
+ 379 0008 DF93      		push r29
+ 380 000a 00D0      		rcall .
+ 381 000c 00D0      		rcall .
+ 382 000e CDB7      		in r28,__SP_L__
+ 383 0010 DEB7      		in r29,__SP_H__
+ 384               	/* prologue: function */
+ 385               	/* frame size = 4 */
+ 386               	/* stack size = 9 */
+ 387               	.L__stack_usage = 9
+ 388 0012 E0E0      		ldi r30,lo8(press_memory)
+ 389 0014 F0E0      		ldi r31,hi8(press_memory)
+ 390               	.L17:
+ 391               	.LBB4:
+  59:zad1.c        **** 	}
+ 393               	.LM30:
+ 394 0016 1192      		st Z+,__zero_reg__
+ 395 0018 1192      		st Z+,__zero_reg__
+  57:zad1.c        **** 	{
+ 397               	.LM31:
+ 398 001a 80E0      		ldi r24,hi8(press_memory+202)
+ 399 001c E030      		cpi r30,lo8(press_memory+202)
+ 400 001e F807      		cpc r31,r24
+ 401 0020 01F4      		brne .L17
+ 402               	.LBE4:
+  64:zad1.c        **** 			(
+ 404               	.LM32:
+ 405 0022 CE01      		movw r24,r28
+ 406 0024 0396      		adiw r24,3
+ 407 0026 7C01      		movw r14,r24
+ 408 0028 02E0      		ldi r16,lo8(2)
+ 409 002a 20E0      		ldi r18,0
+ 410 002c 30E0      		ldi r19,0
+ 411 002e 45E5      		ldi r20,lo8(85)
+ 412 0030 50E0      		ldi r21,0
+ 413 0032 60E0      		ldi r22,lo8(.LC0)
+ 414 0034 70E0      		ldi r23,hi8(.LC0)
+ 415 0036 80E0      		ldi r24,lo8(gs(vSekunda))
+ 416 0038 90E0      		ldi r25,hi8(gs(vSekunda))
+ 417 003a 0E94 0000 		call xTaskCreate
+  73:zad1.c        **** 			(
+ 419               	.LM33:
+ 420 003e CE01      		movw r24,r28
+ 421 0040 0196      		adiw r24,1
+ 422 0042 7C01      		movw r14,r24
+ 423 0044 01E0      		ldi r16,lo8(1)
+ 424 0046 20E0      		ldi r18,0
+ 425 0048 30E0      		ldi r19,0
+ 426 004a 45E5      		ldi r20,lo8(85)
+ 427 004c 50E0      		ldi r21,0
+ 428 004e 60E0      		ldi r22,lo8(.LC1)
+ 429 0050 70E0      		ldi r23,hi8(.LC1)
+ 430 0052 80E0      		ldi r24,lo8(gs(vDrabinka))
+ 431 0054 90E0      		ldi r25,hi8(gs(vDrabinka))
+ 432 0056 0E94 0000 		call xTaskCreate
+  83:zad1.c        **** 		return 0;
+ 434               	.LM34:
+ 435 005a 0E94 0000 		call vTaskStartScheduler
+  85:zad1.c        **** 
+ 437               	.LM35:
+ 438 005e 80E0      		ldi r24,0
+ 439 0060 90E0      		ldi r25,0
+ 440               	/* epilogue start */
+ 441 0062 0F90      		pop __tmp_reg__
+ 442 0064 0F90      		pop __tmp_reg__
+ 443 0066 0F90      		pop __tmp_reg__
+ 444 0068 0F90      		pop __tmp_reg__
+ 445 006a DF91      		pop r29
+ 446 006c CF91      		pop r28
+ 447 006e 0F91      		pop r16
+ 448 0070 FF90      		pop r15
+ 449 0072 EF90      		pop r14
+ 450 0074 0895      		ret
+ 456               	.Lscope3:
+ 458               		.stabd	78,0,0
+ 459               		.text
+ 461               	.global	vApplicationIdleHook
+ 463               	vApplicationIdleHook:
+ 464               		.stabd	46,0,0
+  93:zad1.c        **** 
+ 466               	.LM36:
+ 467               	.LFBB4:
+ 468               	/* prologue: function */
+ 469               	/* frame size = 0 */
+ 470               	/* stack size = 0 */
+ 471               	.L__stack_usage = 0
+ 472 00c2 0895      		ret
+ 474               	.Lscope4:
+ 476               		.stabd	78,0,0
+ 477               		.comm	counter,2,1
+ 478               		.comm	press_memory,202,1
+ 479               		.comm	uart_file,14,1
+ 484               	.Letext0:
+ 485               		.ident	"GCC: (GNU) 5.4.0"
+ 486               	.global __do_copy_data
+ 487               	.global __do_clear_bss
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 zad1.c
+     /tmp/cc11l1JQ.s:2      *ABS*:000000000000003e __SP_H__
+     /tmp/cc11l1JQ.s:3      *ABS*:000000000000003d __SP_L__
+     /tmp/cc11l1JQ.s:4      *ABS*:000000000000003f __SREG__
+     /tmp/cc11l1JQ.s:5      *ABS*:0000000000000000 __tmp_reg__
+     /tmp/cc11l1JQ.s:6      *ABS*:0000000000000001 __zero_reg__
+     /tmp/cc11l1JQ.s:182    .text:0000000000000000 vDrabinka
+     /tmp/cc11l1JQ.s:252    .text:0000000000000042 vSekunda
+                            *COM*:0000000000000002 counter
+                            *COM*:00000000000000ca press_memory
+     /tmp/cc11l1JQ.s:370    .text.startup:0000000000000000 main
+     /tmp/cc11l1JQ.s:463    .text:00000000000000c2 vApplicationIdleHook
+                            *COM*:000000000000000e uart_file
+
+UNDEFINED SYMBOLS
+vTaskDelay
+__divmodhi4
+xTaskCreate
+vTaskStartScheduler
+__do_copy_data
+__do_clear_bss

@@ -1,0 +1,642 @@
+   1               		.file	"zad4.c"
+   2               	__SP_H__ = 0x3e
+   3               	__SP_L__ = 0x3d
+   4               	__SREG__ = 0x3f
+   5               	__tmp_reg__ = 0
+   6               	__zero_reg__ = 1
+   9               		.text
+  10               	.Ltext0:
+ 188               	.global	vApplicationIdleHook
+ 190               	vApplicationIdleHook:
+ 191               		.stabd	46,0,0
+   1:zad4.c        **** #include "FreeRTOS.h"
+   2:zad4.c        **** #include "FreeRTOSConfig.h"
+   3:zad4.c        **** #include "task.h"
+   4:zad4.c        **** #include "semphr.h"
+   5:zad4.c        **** #include <avr/io.h>
+   6:zad4.c        **** #include <avr/interrupt.h>
+   7:zad4.c        **** #include <util/delay.h>
+   8:zad4.c        **** 
+   9:zad4.c        **** #include <stdio.h>
+  10:zad4.c        **** #include "uart.h"
+  11:zad4.c        **** 
+  12:zad4.c        **** #define mainSERIAL_TASK_PRIORITY 1
+  13:zad4.c        **** 
+  14:zad4.c        **** 
+  15:zad4.c        **** static void vSerial(void* pvParameters);
+  16:zad4.c        **** 
+  17:zad4.c        **** 
+  18:zad4.c        **** SemaphoreHandle_t adc_mutex, vserial_mutex;
+  19:zad4.c        **** 
+  20:zad4.c        **** void adc_init();
+  21:zad4.c        **** 
+  22:zad4.c        **** uint16_t readADC(uint8_t mux);
+  23:zad4.c        **** 
+  24:zad4.c        **** int main(void)
+  25:zad4.c        **** {
+  26:zad4.c        ****     adc_init();
+  27:zad4.c        ****     sei();
+  28:zad4.c        ****     uart_init();
+  29:zad4.c        ****     stdin = stdout = stderr = &uart_file;
+  30:zad4.c        **** 
+  31:zad4.c        ****     xTaskHandle adc0_handle;
+  32:zad4.c        ****     xTaskHandle adc1_handle;
+  33:zad4.c        ****     xTaskHandle adc2_handle;
+  34:zad4.c        ****     adc_mutex = xSemaphoreCreateMutex();
+  35:zad4.c        ****     vserial_mutex = xSemaphoreCreateMutex();
+  36:zad4.c        **** 
+  37:zad4.c        **** 
+  38:zad4.c        ****     xTaskCreate
+  39:zad4.c        ****         (
+  40:zad4.c        ****          vSerial,
+  41:zad4.c        ****          "adc0",
+  42:zad4.c        ****          configMINIMAL_STACK_SIZE,
+  43:zad4.c        ****          0,
+  44:zad4.c        ****          mainSERIAL_TASK_PRIORITY,
+  45:zad4.c        ****          &adc0_handle
+  46:zad4.c        ****         );
+  47:zad4.c        **** 
+  48:zad4.c        ****     xTaskCreate
+  49:zad4.c        ****         (
+  50:zad4.c        ****          vSerial,
+  51:zad4.c        ****          "adc1",
+  52:zad4.c        ****          configMINIMAL_STACK_SIZE,
+  53:zad4.c        ****          1,
+  54:zad4.c        ****          mainSERIAL_TASK_PRIORITY,
+  55:zad4.c        ****          &adc1_handle
+  56:zad4.c        ****         );
+  57:zad4.c        **** 
+  58:zad4.c        ****     xTaskCreate
+  59:zad4.c        ****         (
+  60:zad4.c        ****          vSerial,
+  61:zad4.c        ****          "adc2",
+  62:zad4.c        ****          configMINIMAL_STACK_SIZE,
+  63:zad4.c        ****          2,
+  64:zad4.c        ****          mainSERIAL_TASK_PRIORITY,
+  65:zad4.c        ****          &adc2_handle
+  66:zad4.c        ****         );
+  67:zad4.c        **** 
+  68:zad4.c        ****     // Start scheduler.
+  69:zad4.c        ****     vTaskStartScheduler();
+  70:zad4.c        **** 
+  71:zad4.c        ****     return 0;
+  72:zad4.c        **** }
+  73:zad4.c        **** 
+  74:zad4.c        **** void vApplicationIdleHook(void)
+  75:zad4.c        **** {
+ 193               	.LM0:
+ 194               	.LFBB1:
+ 195               	/* prologue: function */
+ 196               	/* frame size = 0 */
+ 197               	/* stack size = 0 */
+ 198               	.L__stack_usage = 0
+ 199 0000 0895      		ret
+ 201               	.Lscope1:
+ 203               		.stabd	78,0,0
+ 205               	.global	adc_init
+ 207               	adc_init:
+ 208               		.stabd	46,0,0
+  76:zad4.c        **** 
+  77:zad4.c        **** }
+  78:zad4.c        **** 
+  79:zad4.c        **** 
+  80:zad4.c        **** static void vSerial(void* pvParameters)
+  81:zad4.c        **** {
+  82:zad4.c        ****     uint8_t id = (uint8_t)pvParameters;
+  83:zad4.c        ****     vTaskDelay((1000*id) / portTICK_PERIOD_MS);
+  84:zad4.c        **** 
+  85:zad4.c        ****     while (1) {
+  86:zad4.c        ****         xSemaphoreTake(vserial_mutex, portMAX_DELAY);
+  87:zad4.c        ****         printf("Urzadzenie nr %"PRIu8":%d\r\n", id, readADC(id));   
+  88:zad4.c        ****         xSemaphoreGive(vserial_mutex);
+  89:zad4.c        ****         vTaskDelay(2500 / portTICK_PERIOD_MS);
+  90:zad4.c        ****     }
+  91:zad4.c        **** }
+  92:zad4.c        **** 
+  93:zad4.c        **** void adc_init() {
+ 210               	.LM1:
+ 211               	.LFBB2:
+ 212               	/* prologue: function */
+ 213               	/* frame size = 0 */
+ 214               	/* stack size = 0 */
+ 215               	.L__stack_usage = 0
+  94:zad4.c        ****     ADMUX = _BV(REFS0);  //referencja AVcc, wejście ADC0
+ 217               	.LM2:
+ 218 0002 80E4      		ldi r24,lo8(64)
+ 219 0004 8093 7C00 		sts 124,r24
+  95:zad4.c        ****     DIDR0 = _BV(ADC0D) | _BV(ADC1D) | _BV(ADC2D); //wyłącz wejście cyfrowe na ADC0-ADC2
+ 221               	.LM3:
+ 222 0008 87E0      		ldi r24,lo8(7)
+ 223 000a 8093 7E00 		sts 126,r24
+  96:zad4.c        ****     ADCSRA = _BV(ADPS0) | _BV(ADPS1) | _BV(ADPS2); //presklaer 128
+ 225               	.LM4:
+ 226 000e EAE7      		ldi r30,lo8(122)
+ 227 0010 F0E0      		ldi r31,0
+ 228 0012 8083      		st Z,r24
+  97:zad4.c        ****     ADCSRA |= _BV(ADEN) | _BV(ADIE); //ADIE - odpala przerwania, ADEN włącza adc
+ 230               	.LM5:
+ 231 0014 8081      		ld r24,Z
+ 232 0016 8868      		ori r24,lo8(-120)
+ 233 0018 8083      		st Z,r24
+ 234 001a 0895      		ret
+ 236               	.Lscope2:
+ 238               		.stabd	78,0,0
+ 239               		.section	.rodata.str1.1,"aMS",@progbits,1
+ 240               	.LC0:
+ 241 0000 6164 6330 		.string	"adc0"
+ 241      00
+ 242               	.LC1:
+ 243 0005 6164 6331 		.string	"adc1"
+ 243      00
+ 244               	.LC2:
+ 245 000a 6164 6332 		.string	"adc2"
+ 245      00
+ 246               		.section	.text.startup,"ax",@progbits
+ 248               	.global	main
+ 250               	main:
+ 251               		.stabd	46,0,0
+  25:zad4.c        ****     adc_init();
+ 253               	.LM6:
+ 254               	.LFBB3:
+ 255 0000 EF92      		push r14
+ 256 0002 FF92      		push r15
+ 257 0004 0F93      		push r16
+ 258 0006 CF93      		push r28
+ 259 0008 DF93      		push r29
+ 260 000a 00D0      		rcall .
+ 261 000c 00D0      		rcall .
+ 262 000e 00D0      		rcall .
+ 263 0010 CDB7      		in r28,__SP_L__
+ 264 0012 DEB7      		in r29,__SP_H__
+ 265               	/* prologue: function */
+ 266               	/* frame size = 6 */
+ 267               	/* stack size = 11 */
+ 268               	.L__stack_usage = 11
+  26:zad4.c        ****     sei();
+ 270               	.LM7:
+ 271 0014 0E94 0000 		call adc_init
+  27:zad4.c        ****     uart_init();
+ 273               	.LM8:
+ 274               	/* #APP */
+ 275               	 ;  27 "zad4.c" 1
+ 276 0018 7894      		sei
+ 277               	 ;  0 "" 2
+  28:zad4.c        ****     stdin = stdout = stderr = &uart_file;
+ 279               	.LM9:
+ 280               	/* #NOAPP */
+ 281 001a 0E94 0000 		call uart_init
+  29:zad4.c        **** 
+ 283               	.LM10:
+ 284 001e E0E0      		ldi r30,lo8(__iob)
+ 285 0020 F0E0      		ldi r31,hi8(__iob)
+ 286 0022 80E0      		ldi r24,lo8(uart_file)
+ 287 0024 90E0      		ldi r25,hi8(uart_file)
+ 288 0026 9583      		std Z+5,r25
+ 289 0028 8483      		std Z+4,r24
+ 290 002a 9383      		std Z+3,r25
+ 291 002c 8283      		std Z+2,r24
+ 292 002e 9183      		std Z+1,r25
+ 293 0030 8083      		st Z,r24
+  34:zad4.c        ****     vserial_mutex = xSemaphoreCreateMutex();
+ 295               	.LM11:
+ 296 0032 81E0      		ldi r24,lo8(1)
+ 297 0034 0E94 0000 		call xQueueCreateMutex
+ 298 0038 9093 0000 		sts adc_mutex+1,r25
+ 299 003c 8093 0000 		sts adc_mutex,r24
+  35:zad4.c        **** 
+ 301               	.LM12:
+ 302 0040 81E0      		ldi r24,lo8(1)
+ 303 0042 0E94 0000 		call xQueueCreateMutex
+ 304 0046 9093 0000 		sts vserial_mutex+1,r25
+ 305 004a 8093 0000 		sts vserial_mutex,r24
+  38:zad4.c        ****         (
+ 307               	.LM13:
+ 308 004e CE01      		movw r24,r28
+ 309 0050 0596      		adiw r24,5
+ 310 0052 7C01      		movw r14,r24
+ 311 0054 01E0      		ldi r16,lo8(1)
+ 312 0056 20E0      		ldi r18,0
+ 313 0058 30E0      		ldi r19,0
+ 314 005a 45E5      		ldi r20,lo8(85)
+ 315 005c 50E0      		ldi r21,0
+ 316 005e 60E0      		ldi r22,lo8(.LC0)
+ 317 0060 70E0      		ldi r23,hi8(.LC0)
+ 318 0062 80E0      		ldi r24,lo8(gs(vSerial))
+ 319 0064 90E0      		ldi r25,hi8(gs(vSerial))
+ 320 0066 0E94 0000 		call xTaskCreate
+  48:zad4.c        ****         (
+ 322               	.LM14:
+ 323 006a CE01      		movw r24,r28
+ 324 006c 0396      		adiw r24,3
+ 325 006e 7C01      		movw r14,r24
+ 326 0070 21E0      		ldi r18,lo8(1)
+ 327 0072 30E0      		ldi r19,0
+ 328 0074 45E5      		ldi r20,lo8(85)
+ 329 0076 50E0      		ldi r21,0
+ 330 0078 60E0      		ldi r22,lo8(.LC1)
+ 331 007a 70E0      		ldi r23,hi8(.LC1)
+ 332 007c 80E0      		ldi r24,lo8(gs(vSerial))
+ 333 007e 90E0      		ldi r25,hi8(gs(vSerial))
+ 334 0080 0E94 0000 		call xTaskCreate
+  58:zad4.c        ****         (
+ 336               	.LM15:
+ 337 0084 CE01      		movw r24,r28
+ 338 0086 0196      		adiw r24,1
+ 339 0088 7C01      		movw r14,r24
+ 340 008a 22E0      		ldi r18,lo8(2)
+ 341 008c 30E0      		ldi r19,0
+ 342 008e 45E5      		ldi r20,lo8(85)
+ 343 0090 50E0      		ldi r21,0
+ 344 0092 60E0      		ldi r22,lo8(.LC2)
+ 345 0094 70E0      		ldi r23,hi8(.LC2)
+ 346 0096 80E0      		ldi r24,lo8(gs(vSerial))
+ 347 0098 90E0      		ldi r25,hi8(gs(vSerial))
+ 348 009a 0E94 0000 		call xTaskCreate
+  69:zad4.c        **** 
+ 350               	.LM16:
+ 351 009e 0E94 0000 		call vTaskStartScheduler
+  72:zad4.c        **** 
+ 353               	.LM17:
+ 354 00a2 80E0      		ldi r24,0
+ 355 00a4 90E0      		ldi r25,0
+ 356               	/* epilogue start */
+ 357 00a6 2696      		adiw r28,6
+ 358 00a8 0FB6      		in __tmp_reg__,__SREG__
+ 359 00aa F894      		cli
+ 360 00ac DEBF      		out __SP_H__,r29
+ 361 00ae 0FBE      		out __SREG__,__tmp_reg__
+ 362 00b0 CDBF      		out __SP_L__,r28
+ 363 00b2 DF91      		pop r29
+ 364 00b4 CF91      		pop r28
+ 365 00b6 0F91      		pop r16
+ 366 00b8 FF90      		pop r15
+ 367 00ba EF90      		pop r14
+ 368 00bc 0895      		ret
+ 375               	.Lscope3:
+ 377               		.stabd	78,0,0
+ 378               		.text
+ 381               	.global	readADC
+ 383               	readADC:
+ 384               		.stabd	46,0,0
+  98:zad4.c        **** }
+  99:zad4.c        **** 
+ 100:zad4.c        **** uint16_t readADC(uint8_t mux) {
+ 386               	.LM18:
+ 387               	.LFBB4:
+ 388               	/* prologue: function */
+ 389               	/* frame size = 0 */
+ 390               	/* stack size = 0 */
+ 391               	.L__stack_usage = 0
+ 101:zad4.c        ****     ADMUX = _BV(REFS0) | mux;
+ 393               	.LM19:
+ 394 001c 8064      		ori r24,lo8(64)
+ 395 001e 8093 7C00 		sts 124,r24
+ 102:zad4.c        ****     ADCSRA |= _BV(ADSC);
+ 397               	.LM20:
+ 398 0022 EAE7      		ldi r30,lo8(122)
+ 399 0024 F0E0      		ldi r31,0
+ 400 0026 8081      		ld r24,Z
+ 401 0028 8064      		ori r24,lo8(64)
+ 402 002a 8083      		st Z,r24
+ 103:zad4.c        ****     xSemaphoreTake(adc_mutex, portMAX_DELAY); //zamiast while
+ 404               	.LM21:
+ 405 002c 6FEF      		ldi r22,lo8(-1)
+ 406 002e 7FEF      		ldi r23,lo8(-1)
+ 407 0030 8091 0000 		lds r24,adc_mutex
+ 408 0034 9091 0000 		lds r25,adc_mutex+1
+ 409 0038 0E94 0000 		call xQueueSemaphoreTake
+ 104:zad4.c        ****     uint16_t result = ADC;
+ 411               	.LM22:
+ 412 003c 8091 7800 		lds r24,120
+ 413 0040 9091 7900 		lds r25,120+1
+ 105:zad4.c        ****     return result;
+ 106:zad4.c        **** }
+ 415               	.LM23:
+ 416 0044 0895      		ret
+ 421               	.Lscope4:
+ 423               		.stabd	78,0,0
+ 424               		.section	.rodata.str1.1
+ 425               	.LC3:
+ 426 000f 5572 7A61 		.string	"Urzadzenie nr %u:%d\r\n"
+ 426      647A 656E 
+ 426      6965 206E 
+ 426      7220 2575 
+ 426      3A25 640D 
+ 427               		.text
+ 431               	vSerial:
+ 432               		.stabd	46,0,0
+  81:zad4.c        ****     uint8_t id = (uint8_t)pvParameters;
+ 434               	.LM24:
+ 435               	.LFBB5:
+ 436               	/* prologue: function */
+ 437               	/* frame size = 0 */
+ 438               	/* stack size = 0 */
+ 439               	.L__stack_usage = 0
+  82:zad4.c        ****     vTaskDelay((1000*id) / portTICK_PERIOD_MS);
+ 441               	.LM25:
+ 442 0046 F82E      		mov r15,r24
+ 443 0048 EC01      		movw r28,r24
+ 444 004a DD27      		clr r29
+  83:zad4.c        **** 
+ 446               	.LM26:
+ 447 004c 88EE      		ldi r24,lo8(-24)
+ 448 004e 93E0      		ldi r25,lo8(3)
+ 449 0050 9C01      		movw r18,r24
+ 450 0052 C29F      		mul r28,r18
+ 451 0054 C001      		movw r24,r0
+ 452 0056 C39F      		mul r28,r19
+ 453 0058 900D      		add r25,r0
+ 454 005a D29F      		mul r29,r18
+ 455 005c 900D      		add r25,r0
+ 456 005e 1124      		clr r1
+ 457 0060 0E94 0000 		call vTaskDelay
+  87:zad4.c        ****         xSemaphoreGive(vserial_mutex);
+ 459               	.LM27:
+ 460 0064 00E0      		ldi r16,lo8(.LC3)
+ 461 0066 10E0      		ldi r17,hi8(.LC3)
+ 462               	.L6:
+  86:zad4.c        ****         printf("Urzadzenie nr %"PRIu8":%d\r\n", id, readADC(id));   
+ 464               	.LM28:
+ 465 0068 6FEF      		ldi r22,lo8(-1)
+ 466 006a 7FEF      		ldi r23,lo8(-1)
+ 467 006c 8091 0000 		lds r24,vserial_mutex
+ 468 0070 9091 0000 		lds r25,vserial_mutex+1
+ 469 0074 0E94 0000 		call xQueueSemaphoreTake
+  87:zad4.c        ****         xSemaphoreGive(vserial_mutex);
+ 471               	.LM29:
+ 472 0078 8F2D      		mov r24,r15
+ 473 007a 0E94 0000 		call readADC
+ 474 007e 9F93      		push r25
+ 475 0080 8F93      		push r24
+ 476 0082 DF93      		push r29
+ 477 0084 CF93      		push r28
+ 478 0086 1F93      		push r17
+ 479 0088 0F93      		push r16
+ 480 008a 0E94 0000 		call printf
+  88:zad4.c        ****         vTaskDelay(2500 / portTICK_PERIOD_MS);
+ 482               	.LM30:
+ 483 008e 20E0      		ldi r18,0
+ 484 0090 40E0      		ldi r20,0
+ 485 0092 50E0      		ldi r21,0
+ 486 0094 60E0      		ldi r22,0
+ 487 0096 70E0      		ldi r23,0
+ 488 0098 8091 0000 		lds r24,vserial_mutex
+ 489 009c 9091 0000 		lds r25,vserial_mutex+1
+ 490 00a0 0E94 0000 		call xQueueGenericSend
+  89:zad4.c        ****     }
+ 492               	.LM31:
+ 493 00a4 84EC      		ldi r24,lo8(-60)
+ 494 00a6 99E0      		ldi r25,lo8(9)
+ 495 00a8 0E94 0000 		call vTaskDelay
+ 496 00ac 0F90      		pop __tmp_reg__
+ 497 00ae 0F90      		pop __tmp_reg__
+ 498 00b0 0F90      		pop __tmp_reg__
+ 499 00b2 0F90      		pop __tmp_reg__
+ 500 00b4 0F90      		pop __tmp_reg__
+ 501 00b6 0F90      		pop __tmp_reg__
+ 502 00b8 00C0      		rjmp .L6
+ 507               	.Lscope5:
+ 509               		.stabd	78,0,0
+ 511               	.global	__vector_21
+ 513               	__vector_21:
+ 514               		.stabd	46,0,0
+ 107:zad4.c        **** 
+ 108:zad4.c        **** ISR(ADC_vect) {
+ 516               	.LM32:
+ 517               	.LFBB6:
+ 518 00ba 1F92      		push r1
+ 519 00bc 0F92      		push r0
+ 520 00be 0FB6      		in r0,__SREG__
+ 521 00c0 0F92      		push r0
+ 522 00c2 1124      		clr __zero_reg__
+ 523 00c4 2F93      		push r18
+ 524 00c6 3F93      		push r19
+ 525 00c8 4F93      		push r20
+ 526 00ca 5F93      		push r21
+ 527 00cc 6F93      		push r22
+ 528 00ce 7F93      		push r23
+ 529 00d0 8F93      		push r24
+ 530 00d2 9F93      		push r25
+ 531 00d4 AF93      		push r26
+ 532 00d6 BF93      		push r27
+ 533 00d8 EF93      		push r30
+ 534 00da FF93      		push r31
+ 535               	/* prologue: Signal */
+ 536               	/* frame size = 0 */
+ 537               	/* stack size = 15 */
+ 538               	.L__stack_usage = 15
+ 109:zad4.c        ****     xSemaphoreGiveFromISR(adc_mutex, NULL);
+ 540               	.LM33:
+ 541 00dc 60E0      		ldi r22,0
+ 542 00de 70E0      		ldi r23,0
+ 543 00e0 8091 0000 		lds r24,adc_mutex
+ 544 00e4 9091 0000 		lds r25,adc_mutex+1
+ 545 00e8 0E94 0000 		call xQueueGiveFromISR
+ 546               	/* epilogue start */
+ 110:zad4.c        **** }
+ 548               	.LM34:
+ 549 00ec FF91      		pop r31
+ 550 00ee EF91      		pop r30
+ 551 00f0 BF91      		pop r27
+ 552 00f2 AF91      		pop r26
+ 553 00f4 9F91      		pop r25
+ 554 00f6 8F91      		pop r24
+ 555 00f8 7F91      		pop r23
+ 556 00fa 6F91      		pop r22
+ 557 00fc 5F91      		pop r21
+ 558 00fe 4F91      		pop r20
+ 559 0100 3F91      		pop r19
+ 560 0102 2F91      		pop r18
+ 561 0104 0F90      		pop r0
+ 562 0106 0FBE      		out __SREG__,r0
+ 563 0108 0F90      		pop r0
+ 564 010a 1F90      		pop r1
+ 565 010c 1895      		reti
+ 567               	.Lscope6:
+ 569               		.stabd	78,0,0
+ 571               	.global	__vector_19
+ 573               	__vector_19:
+ 574               		.stabd	46,0,0
+ 111:zad4.c        **** 
+ 112:zad4.c        **** ISR(USART_UDRE_vect) {
+ 576               	.LM35:
+ 577               	.LFBB7:
+ 578 010e 1F92      		push r1
+ 579 0110 0F92      		push r0
+ 580 0112 0FB6      		in r0,__SREG__
+ 581 0114 0F92      		push r0
+ 582 0116 1124      		clr __zero_reg__
+ 583 0118 2F93      		push r18
+ 584 011a 3F93      		push r19
+ 585 011c 4F93      		push r20
+ 586 011e 5F93      		push r21
+ 587 0120 6F93      		push r22
+ 588 0122 7F93      		push r23
+ 589 0124 8F93      		push r24
+ 590 0126 9F93      		push r25
+ 591 0128 AF93      		push r26
+ 592 012a BF93      		push r27
+ 593 012c EF93      		push r30
+ 594 012e FF93      		push r31
+ 595               	/* prologue: Signal */
+ 596               	/* frame size = 0 */
+ 597               	/* stack size = 15 */
+ 598               	.L__stack_usage = 15
+ 113:zad4.c        ****     if (xQueueIsQueueEmptyFromISR(bufor_out) == pdFALSE)
+ 600               	.LM36:
+ 601 0130 8091 0000 		lds r24,bufor_out
+ 602 0134 9091 0000 		lds r25,bufor_out+1
+ 603 0138 0E94 0000 		call xQueueIsQueueEmptyFromISR
+ 604 013c 8111      		cpse r24,__zero_reg__
+ 605 013e 00C0      		rjmp .L9
+ 114:zad4.c        ****         xQueueReceiveFromISR(bufor_out, (void*)&UDR0, NULL);
+ 607               	.LM37:
+ 608 0140 40E0      		ldi r20,0
+ 609 0142 50E0      		ldi r21,0
+ 610 0144 66EC      		ldi r22,lo8(-58)
+ 611 0146 70E0      		ldi r23,0
+ 612 0148 8091 0000 		lds r24,bufor_out
+ 613 014c 9091 0000 		lds r25,bufor_out+1
+ 614 0150 0E94 0000 		call xQueueReceiveFromISR
+ 615               	.L9:
+ 616               	/* epilogue start */
+ 115:zad4.c        **** }
+ 618               	.LM38:
+ 619 0154 FF91      		pop r31
+ 620 0156 EF91      		pop r30
+ 621 0158 BF91      		pop r27
+ 622 015a AF91      		pop r26
+ 623 015c 9F91      		pop r25
+ 624 015e 8F91      		pop r24
+ 625 0160 7F91      		pop r23
+ 626 0162 6F91      		pop r22
+ 627 0164 5F91      		pop r21
+ 628 0166 4F91      		pop r20
+ 629 0168 3F91      		pop r19
+ 630 016a 2F91      		pop r18
+ 631 016c 0F90      		pop r0
+ 632 016e 0FBE      		out __SREG__,r0
+ 633 0170 0F90      		pop r0
+ 634 0172 1F90      		pop r1
+ 635 0174 1895      		reti
+ 637               	.Lscope7:
+ 639               		.stabd	78,0,0
+ 641               	.global	__vector_18
+ 643               	__vector_18:
+ 644               		.stabd	46,0,0
+ 116:zad4.c        **** 
+ 117:zad4.c        **** ISR(USART_RX_vect) {
+ 646               	.LM39:
+ 647               	.LFBB8:
+ 648 0176 1F92      		push r1
+ 649 0178 0F92      		push r0
+ 650 017a 0FB6      		in r0,__SREG__
+ 651 017c 0F92      		push r0
+ 652 017e 1124      		clr __zero_reg__
+ 653 0180 2F93      		push r18
+ 654 0182 3F93      		push r19
+ 655 0184 4F93      		push r20
+ 656 0186 5F93      		push r21
+ 657 0188 6F93      		push r22
+ 658 018a 7F93      		push r23
+ 659 018c 8F93      		push r24
+ 660 018e 9F93      		push r25
+ 661 0190 AF93      		push r26
+ 662 0192 BF93      		push r27
+ 663 0194 EF93      		push r30
+ 664 0196 FF93      		push r31
+ 665 0198 CF93      		push r28
+ 666 019a DF93      		push r29
+ 667 019c 1F92      		push __zero_reg__
+ 668 019e CDB7      		in r28,__SP_L__
+ 669 01a0 DEB7      		in r29,__SP_H__
+ 670               	/* prologue: Signal */
+ 671               	/* frame size = 1 */
+ 672               	/* stack size = 18 */
+ 673               	.L__stack_usage = 18
+ 118:zad4.c        ****     uint8_t value = UDR0;
+ 675               	.LM40:
+ 676 01a2 8091 C600 		lds r24,198
+ 677 01a6 8983      		std Y+1,r24
+ 119:zad4.c        ****     xQueueSendFromISR(bufor_in, (void*)&value, NULL);
+ 679               	.LM41:
+ 680 01a8 20E0      		ldi r18,0
+ 681 01aa 40E0      		ldi r20,0
+ 682 01ac 50E0      		ldi r21,0
+ 683 01ae BE01      		movw r22,r28
+ 684 01b0 6F5F      		subi r22,-1
+ 685 01b2 7F4F      		sbci r23,-1
+ 686 01b4 8091 0000 		lds r24,bufor_in
+ 687 01b8 9091 0000 		lds r25,bufor_in+1
+ 688 01bc 0E94 0000 		call xQueueGenericSendFromISR
+ 689               	/* epilogue start */
+ 120:zad4.c        **** }...
+ 691               	.LM42:
+ 692 01c0 0F90      		pop __tmp_reg__
+ 693 01c2 DF91      		pop r29
+ 694 01c4 CF91      		pop r28
+ 695 01c6 FF91      		pop r31
+ 696 01c8 EF91      		pop r30
+ 697 01ca BF91      		pop r27
+ 698 01cc AF91      		pop r26
+ 699 01ce 9F91      		pop r25
+ 700 01d0 8F91      		pop r24
+ 701 01d2 7F91      		pop r23
+ 702 01d4 6F91      		pop r22
+ 703 01d6 5F91      		pop r21
+ 704 01d8 4F91      		pop r20
+ 705 01da 3F91      		pop r19
+ 706 01dc 2F91      		pop r18
+ 707 01de 0F90      		pop r0
+ 708 01e0 0FBE      		out __SREG__,r0
+ 709 01e2 0F90      		pop r0
+ 710 01e4 1F90      		pop r1
+ 711 01e6 1895      		reti
+ 716               	.Lscope8:
+ 718               		.stabd	78,0,0
+ 719               		.comm	vserial_mutex,2,1
+ 720               		.comm	adc_mutex,2,1
+ 721               		.comm	bufor_out,2,1
+ 722               		.comm	bufor_in,2,1
+ 723               		.comm	uart_file,14,1
+ 730               	.Letext0:
+ 731               		.ident	"GCC: (GNU) 5.4.0"
+ 732               	.global __do_copy_data
+ 733               	.global __do_clear_bss
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 zad4.c
+     /tmp/cc1Ga6rb.s:2      *ABS*:000000000000003e __SP_H__
+     /tmp/cc1Ga6rb.s:3      *ABS*:000000000000003d __SP_L__
+     /tmp/cc1Ga6rb.s:4      *ABS*:000000000000003f __SREG__
+     /tmp/cc1Ga6rb.s:5      *ABS*:0000000000000000 __tmp_reg__
+     /tmp/cc1Ga6rb.s:6      *ABS*:0000000000000001 __zero_reg__
+     /tmp/cc1Ga6rb.s:190    .text:0000000000000000 vApplicationIdleHook
+     /tmp/cc1Ga6rb.s:207    .text:0000000000000002 adc_init
+     /tmp/cc1Ga6rb.s:250    .text.startup:0000000000000000 main
+                            *COM*:000000000000000e uart_file
+                            *COM*:0000000000000002 adc_mutex
+                            *COM*:0000000000000002 vserial_mutex
+     /tmp/cc1Ga6rb.s:431    .text:0000000000000046 vSerial
+     /tmp/cc1Ga6rb.s:383    .text:000000000000001c readADC
+     /tmp/cc1Ga6rb.s:513    .text:00000000000000ba __vector_21
+     /tmp/cc1Ga6rb.s:573    .text:000000000000010e __vector_19
+                            *COM*:0000000000000002 bufor_out
+     /tmp/cc1Ga6rb.s:643    .text:0000000000000176 __vector_18
+                            *COM*:0000000000000002 bufor_in
+
+UNDEFINED SYMBOLS
+uart_init
+__iob
+xQueueCreateMutex
+xTaskCreate
+vTaskStartScheduler
+xQueueSemaphoreTake
+vTaskDelay
+printf
+xQueueGenericSend
+xQueueGiveFromISR
+xQueueIsQueueEmptyFromISR
+xQueueReceiveFromISR
+xQueueGenericSendFromISR
+__do_copy_data
+__do_clear_bss
