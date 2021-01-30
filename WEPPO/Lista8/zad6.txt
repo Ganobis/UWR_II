@@ -1,0 +1,1 @@
+Indeksowanie przyspieszyło pomiar jeżeli indeksy zostały zrobione na kolumnie Nazwisko(przy wyszukaniu SELECT * FROM OSOBA WHERE Nazwisko=’Kowalski’). Jeżeli zaindeksowano tebelę na numerze telefonu, i wyszukiwano Nazwiska, to pomiar nie był przyspieszony.

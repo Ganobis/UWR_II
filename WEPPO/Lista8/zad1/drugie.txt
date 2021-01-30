@@ -1,0 +1,26 @@
+Kod SQL do stworzenia tabeli z autonumerowalnym id:
+
+CREATE TABLE [dbo].[OSOBA](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[imie] [nchar](20) NOT NULL,
+	[nazwisko] [nchar](20) NOT NULL,
+	[plec] [nchar](10) NOT NULL,
+	[nr_telefonu] [nchar](9) NULL,
+ CONSTRAINT [PK_OSOBA] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+
+Kod SQL do wstawienia nowej osoby w tabeli OSOBA:
+
+insert into OSOBA values ('Jan', 'Brzechwa', 'mezczyzna', '794786213');
+
+Kod SQL do pobrania wartości z tablei OSOBY:
+
+select * from OSOBA;
+
+Wykik zapytania:
+id |imie                   |nazwisko               |plec       |nr_telefonu
+1	Jan                     Brzechwa                mezczyzna 	794786213
+2	Marysia                	Figura	                kobieta 	794786214
