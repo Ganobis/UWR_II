@@ -1,0 +1,496 @@
+   1               		.file	"zad3.c"
+   2               	__SP_H__ = 0x3e
+   3               	__SP_L__ = 0x3d
+   4               	__SREG__ = 0x3f
+   5               	__tmp_reg__ = 0
+   6               	__zero_reg__ = 1
+   9               		.text
+  10               	.Ltext0:
+ 184               		.section	.rodata.str1.1,"aMS",@progbits,1
+ 185               	.LC0:
+ 186 0000 4865 6C6C 		.string	"Hello World\r\n"
+ 186      6F20 576F 
+ 186      726C 640D 
+ 186      0A00 
+ 187               	.LC1:
+ 188 000e 596F 7520 		.string	"You wrote %c\r\n"
+ 188      7772 6F74 
+ 188      6520 2563 
+ 188      0D0A 00
+ 189               		.text
+ 193               	vSerial:
+ 194               		.stabd	46,0,0
+   1:zad3.c        **** /******************************************************************************
+   2:zad3.c        ****  * Header file inclusions.
+   3:zad3.c        ****  ******************************************************************************/
+   4:zad3.c        **** 
+   5:zad3.c        **** #include "FreeRTOS.h"
+   6:zad3.c        **** #include "task.h"
+   7:zad3.c        **** 
+   8:zad3.c        **** #include <avr/io.h>
+   9:zad3.c        **** #include "queue.h"
+  10:zad3.c        **** #include <avr/interrupt.h>
+  11:zad3.c        **** #include <stdio.h>
+  12:zad3.c        **** #include "uart.h"
+  13:zad3.c        **** 
+  14:zad3.c        **** /******************************************************************************
+  15:zad3.c        ****  * Private macro definitions.
+  16:zad3.c        ****  ******************************************************************************/
+  17:zad3.c        **** 
+  18:zad3.c        **** #define mainLED_TASK_PRIORITY   1
+  19:zad3.c        **** 
+  20:zad3.c        **** #define mainSERIAL_TASK_PRIORITY 2
+  21:zad3.c        **** 
+  22:zad3.c        **** /******************************************************************************
+  23:zad3.c        ****  * Private function prototypes.
+  24:zad3.c        ****  ******************************************************************************/
+  25:zad3.c        **** 
+  26:zad3.c        **** static void vBlinkLed(void* pvParameters);
+  27:zad3.c        **** 
+  28:zad3.c        **** static void vSerial(void* pvParameters);
+  29:zad3.c        **** 
+  30:zad3.c        **** 
+  31:zad3.c        **** /******************************************************************************
+  32:zad3.c        ****  * Public function definitions.
+  33:zad3.c        ****  ******************************************************************************/
+  34:zad3.c        **** 
+  35:zad3.c        **** /**************************************************************************//**
+  36:zad3.c        ****  * \fn int main(void)
+  37:zad3.c        ****  *
+  38:zad3.c        ****  * \brief Main function.
+  39:zad3.c        ****  *
+  40:zad3.c        ****  * \return
+  41:zad3.c        ****  ******************************************************************************/
+  42:zad3.c        **** int main(void)
+  43:zad3.c        **** {
+  44:zad3.c        ****     // Create task.
+  45:zad3.c        ****     xTaskHandle blink_handle;
+  46:zad3.c        ****     xTaskHandle serial_handle;
+  47:zad3.c        **** 
+  48:zad3.c        ****     xTaskCreate
+  49:zad3.c        ****         (
+  50:zad3.c        ****          vBlinkLed,
+  51:zad3.c        ****          "blink",
+  52:zad3.c        ****          configMINIMAL_STACK_SIZE,
+  53:zad3.c        ****          NULL,
+  54:zad3.c        ****          mainLED_TASK_PRIORITY,
+  55:zad3.c        ****          &blink_handle
+  56:zad3.c        ****         );
+  57:zad3.c        **** 
+  58:zad3.c        ****     xTaskCreate
+  59:zad3.c        ****         (
+  60:zad3.c        ****          vSerial,
+  61:zad3.c        ****          "serial",
+  62:zad3.c        ****          configMINIMAL_STACK_SIZE,
+  63:zad3.c        ****          NULL,
+  64:zad3.c        ****          mainSERIAL_TASK_PRIORITY,
+  65:zad3.c        ****          &serial_handle
+  66:zad3.c        ****         );
+  67:zad3.c        **** 
+  68:zad3.c        ****     // Start scheduler.
+  69:zad3.c        ****     vTaskStartScheduler();
+  70:zad3.c        **** 
+  71:zad3.c        ****     return 0;
+  72:zad3.c        **** }
+  73:zad3.c        **** 
+  74:zad3.c        **** /**************************************************************************//**
+  75:zad3.c        ****  * \fn static vApplicationIdleHook(void)
+  76:zad3.c        ****  *
+  77:zad3.c        ****  * \brief
+  78:zad3.c        ****  ******************************************************************************/
+  79:zad3.c        **** void vApplicationIdleHook(void)
+  80:zad3.c        **** {
+  81:zad3.c        **** 
+  82:zad3.c        **** }
+  83:zad3.c        **** 
+  84:zad3.c        **** /******************************************************************************
+  85:zad3.c        ****  * Private function definitions.
+  86:zad3.c        ****  ******************************************************************************/
+  87:zad3.c        **** 
+  88:zad3.c        **** /**************************************************************************//**
+  89:zad3.c        ****  * \fn static void vBlinkLed(void* pvParameters)
+  90:zad3.c        ****  *
+  91:zad3.c        ****  * \brief
+  92:zad3.c        ****  *
+  93:zad3.c        ****  * \param[in]   pvParameters
+  94:zad3.c        ****  ******************************************************************************/
+  95:zad3.c        **** static void vBlinkLed(void* pvParameters)
+  96:zad3.c        **** {
+  97:zad3.c        ****     DDRB |= _BV(PB5);
+  98:zad3.c        **** 
+  99:zad3.c        ****     while(1)
+ 100:zad3.c        ****     {
+ 101:zad3.c        ****         PORTB ^= _BV(PB5);
+ 102:zad3.c        ****         vTaskDelay(500 / portTICK_PERIOD_MS);
+ 103:zad3.c        ****     }
+ 104:zad3.c        **** }
+ 105:zad3.c        **** 
+ 106:zad3.c        **** 
+ 107:zad3.c        **** /**************************************************************************//**
+ 108:zad3.c        ****  * \fn static void vSerial(void* pvParameters)
+ 109:zad3.c        ****  *
+ 110:zad3.c        ****  * \brief
+ 111:zad3.c        ****  *
+ 112:zad3.c        ****  * \param[in]   pvParameters
+ 113:zad3.c        ****  ******************************************************************************/
+ 114:zad3.c        **** static void vSerial(void* pvParameters)
+ 115:zad3.c        **** {
+ 196               	.LM0:
+ 197               	.LFBB1:
+ 198               	/* prologue: function */
+ 199               	/* frame size = 0 */
+ 200               	/* stack size = 0 */
+ 201               	.L__stack_usage = 0
+ 116:zad3.c        ****     uart_init();
+ 203               	.LM1:
+ 204 0000 0E94 0000 		call uart_init
+ 117:zad3.c        ****     stdin = stdout = stderr = &uart_file;
+ 206               	.LM2:
+ 207 0004 80E0      		ldi r24,lo8(uart_file)
+ 208 0006 90E0      		ldi r25,hi8(uart_file)
+ 209 0008 9093 0000 		sts __iob+4+1,r25
+ 210 000c 8093 0000 		sts __iob+4,r24
+ 211 0010 9093 0000 		sts __iob+2+1,r25
+ 212 0014 8093 0000 		sts __iob+2,r24
+ 213 0018 9093 0000 		sts __iob+1,r25
+ 214 001c 8093 0000 		sts __iob,r24
+ 118:zad3.c        **** 
+ 119:zad3.c        ****     char input;
+ 120:zad3.c        **** 
+ 121:zad3.c        ****     while(1)
+ 122:zad3.c        ****     {
+ 123:zad3.c        ****         puts("Hello World\r\n");
+ 124:zad3.c        ****         input = getchar();
+ 125:zad3.c        ****         printf("You wrote %c\r\n", input); 
+ 216               	.LM3:
+ 217 0020 C0E0      		ldi r28,lo8(.LC1)
+ 218 0022 D0E0      		ldi r29,hi8(.LC1)
+ 219               	.L2:
+ 123:zad3.c        ****         input = getchar();
+ 221               	.LM4:
+ 222 0024 80E0      		ldi r24,lo8(.LC0)
+ 223 0026 90E0      		ldi r25,hi8(.LC0)
+ 224 0028 0E94 0000 		call puts
+ 124:zad3.c        ****         printf("You wrote %c\r\n", input); 
+ 226               	.LM5:
+ 227 002c 8091 0000 		lds r24,__iob
+ 228 0030 9091 0000 		lds r25,__iob+1
+ 229 0034 0E94 0000 		call fgetc
+ 231               	.LM6:
+ 232 0038 282F      		mov r18,r24
+ 233 003a 082E      		mov __tmp_reg__,r24
+ 234 003c 000C      		lsl r0
+ 235 003e 330B      		sbc r19,r19
+ 236 0040 3F93      		push r19
+ 237 0042 8F93      		push r24
+ 238 0044 DF93      		push r29
+ 239 0046 CF93      		push r28
+ 240 0048 0E94 0000 		call printf
+ 241 004c 0F90      		pop __tmp_reg__
+ 242 004e 0F90      		pop __tmp_reg__
+ 243 0050 0F90      		pop __tmp_reg__
+ 244 0052 0F90      		pop __tmp_reg__
+ 245 0054 00C0      		rjmp .L2
+ 247               	.Lscope1:
+ 249               		.stabd	78,0,0
+ 253               	vBlinkLed:
+ 254               		.stabd	46,0,0
+  96:zad3.c        ****     DDRB |= _BV(PB5);
+ 256               	.LM7:
+ 257               	.LFBB2:
+ 258               	/* prologue: function */
+ 259               	/* frame size = 0 */
+ 260               	/* stack size = 0 */
+ 261               	.L__stack_usage = 0
+  97:zad3.c        **** 
+ 263               	.LM8:
+ 264 0056 259A      		sbi 0x4,5
+ 101:zad3.c        ****         vTaskDelay(500 / portTICK_PERIOD_MS);
+ 266               	.LM9:
+ 267 0058 C0E2      		ldi r28,lo8(32)
+ 268               	.L5:
+ 101:zad3.c        ****         vTaskDelay(500 / portTICK_PERIOD_MS);
+ 270               	.LM10:
+ 271 005a 85B1      		in r24,0x5
+ 272 005c 8C27      		eor r24,r28
+ 273 005e 85B9      		out 0x5,r24
+ 102:zad3.c        ****     }
+ 275               	.LM11:
+ 276 0060 84EF      		ldi r24,lo8(-12)
+ 277 0062 91E0      		ldi r25,lo8(1)
+ 278 0064 0E94 0000 		call vTaskDelay
+ 279 0068 00C0      		rjmp .L5
+ 281               	.Lscope2:
+ 283               		.stabd	78,0,0
+ 284               		.section	.rodata.str1.1
+ 285               	.LC2:
+ 286 001d 626C 696E 		.string	"blink"
+ 286      6B00 
+ 287               	.LC3:
+ 288 0023 7365 7269 		.string	"serial"
+ 288      616C 00
+ 289               		.section	.text.startup,"ax",@progbits
+ 291               	.global	main
+ 293               	main:
+ 294               		.stabd	46,0,0
+  43:zad3.c        ****     // Create task.
+ 296               	.LM12:
+ 297               	.LFBB3:
+ 298 0000 EF92      		push r14
+ 299 0002 FF92      		push r15
+ 300 0004 0F93      		push r16
+ 301 0006 CF93      		push r28
+ 302 0008 DF93      		push r29
+ 303 000a 00D0      		rcall .
+ 304 000c 00D0      		rcall .
+ 305 000e CDB7      		in r28,__SP_L__
+ 306 0010 DEB7      		in r29,__SP_H__
+ 307               	/* prologue: function */
+ 308               	/* frame size = 4 */
+ 309               	/* stack size = 9 */
+ 310               	.L__stack_usage = 9
+  48:zad3.c        ****         (
+ 312               	.LM13:
+ 313 0012 CE01      		movw r24,r28
+ 314 0014 0396      		adiw r24,3
+ 315 0016 7C01      		movw r14,r24
+ 316 0018 01E0      		ldi r16,lo8(1)
+ 317 001a 20E0      		ldi r18,0
+ 318 001c 30E0      		ldi r19,0
+ 319 001e 45E5      		ldi r20,lo8(85)
+ 320 0020 50E0      		ldi r21,0
+ 321 0022 60E0      		ldi r22,lo8(.LC2)
+ 322 0024 70E0      		ldi r23,hi8(.LC2)
+ 323 0026 80E0      		ldi r24,lo8(gs(vBlinkLed))
+ 324 0028 90E0      		ldi r25,hi8(gs(vBlinkLed))
+ 325 002a 0E94 0000 		call xTaskCreate
+  58:zad3.c        ****         (
+ 327               	.LM14:
+ 328 002e CE01      		movw r24,r28
+ 329 0030 0196      		adiw r24,1
+ 330 0032 7C01      		movw r14,r24
+ 331 0034 02E0      		ldi r16,lo8(2)
+ 332 0036 20E0      		ldi r18,0
+ 333 0038 30E0      		ldi r19,0
+ 334 003a 45E5      		ldi r20,lo8(85)
+ 335 003c 50E0      		ldi r21,0
+ 336 003e 60E0      		ldi r22,lo8(.LC3)
+ 337 0040 70E0      		ldi r23,hi8(.LC3)
+ 338 0042 80E0      		ldi r24,lo8(gs(vSerial))
+ 339 0044 90E0      		ldi r25,hi8(gs(vSerial))
+ 340 0046 0E94 0000 		call xTaskCreate
+  69:zad3.c        **** 
+ 342               	.LM15:
+ 343 004a 0E94 0000 		call vTaskStartScheduler
+  72:zad3.c        **** 
+ 345               	.LM16:
+ 346 004e 80E0      		ldi r24,0
+ 347 0050 90E0      		ldi r25,0
+ 348               	/* epilogue start */
+ 349 0052 0F90      		pop __tmp_reg__
+ 350 0054 0F90      		pop __tmp_reg__
+ 351 0056 0F90      		pop __tmp_reg__
+ 352 0058 0F90      		pop __tmp_reg__
+ 353 005a DF91      		pop r29
+ 354 005c CF91      		pop r28
+ 355 005e 0F91      		pop r16
+ 356 0060 FF90      		pop r15
+ 357 0062 EF90      		pop r14
+ 358 0064 0895      		ret
+ 364               	.Lscope3:
+ 366               		.stabd	78,0,0
+ 367               		.text
+ 369               	.global	vApplicationIdleHook
+ 371               	vApplicationIdleHook:
+ 372               		.stabd	46,0,0
+  80:zad3.c        **** 
+ 374               	.LM17:
+ 375               	.LFBB4:
+ 376               	/* prologue: function */
+ 377               	/* frame size = 0 */
+ 378               	/* stack size = 0 */
+ 379               	.L__stack_usage = 0
+ 380 006a 0895      		ret
+ 382               	.Lscope4:
+ 384               		.stabd	78,0,0
+ 386               	.global	__vector_19
+ 388               	__vector_19:
+ 389               		.stabd	46,0,0
+ 126:zad3.c        ****     }
+ 127:zad3.c        **** }
+ 128:zad3.c        **** 
+ 129:zad3.c        **** ISR(USART_UDRE_vect) {
+ 391               	.LM18:
+ 392               	.LFBB5:
+ 394               	.LM19:
+ 395 006c 1F92      		push r1
+ 396 006e 0F92      		push r0
+ 397 0070 0FB6      		in r0,__SREG__
+ 398 0072 0F92      		push r0
+ 399 0074 1124      		clr __zero_reg__
+ 400 0076 2F93      		push r18
+ 401 0078 3F93      		push r19
+ 402 007a 4F93      		push r20
+ 403 007c 5F93      		push r21
+ 404 007e 6F93      		push r22
+ 405 0080 7F93      		push r23
+ 406 0082 8F93      		push r24
+ 407 0084 9F93      		push r25
+ 408 0086 AF93      		push r26
+ 409 0088 BF93      		push r27
+ 410 008a EF93      		push r30
+ 411 008c FF93      		push r31
+ 412               	/* prologue: Signal */
+ 413               	/* frame size = 0 */
+ 414               	/* stack size = 15 */
+ 415               	.L__stack_usage = 15
+ 130:zad3.c        ****     if (xQueueIsQueueEmptyFromISR(bufor_out) == pdFALSE)
+ 417               	.LM20:
+ 418 008e 8091 0000 		lds r24,bufor_out
+ 419 0092 9091 0000 		lds r25,bufor_out+1
+ 420 0096 0E94 0000 		call xQueueIsQueueEmptyFromISR
+ 421 009a 8111      		cpse r24,__zero_reg__
+ 422 009c 00C0      		rjmp .L8
+ 131:zad3.c        ****         xQueueReceiveFromISR(bufor_out, (void*)&UDR0, NULL);
+ 424               	.LM21:
+ 425 009e 40E0      		ldi r20,0
+ 426 00a0 50E0      		ldi r21,0
+ 427 00a2 66EC      		ldi r22,lo8(-58)
+ 428 00a4 70E0      		ldi r23,0
+ 429 00a6 8091 0000 		lds r24,bufor_out
+ 430 00aa 9091 0000 		lds r25,bufor_out+1
+ 431 00ae 0E94 0000 		call xQueueReceiveFromISR
+ 432               	.L8:
+ 433               	/* epilogue start */
+ 132:zad3.c        **** }
+ 435               	.LM22:
+ 436 00b2 FF91      		pop r31
+ 437 00b4 EF91      		pop r30
+ 438 00b6 BF91      		pop r27
+ 439 00b8 AF91      		pop r26
+ 440 00ba 9F91      		pop r25
+ 441 00bc 8F91      		pop r24
+ 442 00be 7F91      		pop r23
+ 443 00c0 6F91      		pop r22
+ 444 00c2 5F91      		pop r21
+ 445 00c4 4F91      		pop r20
+ 446 00c6 3F91      		pop r19
+ 447 00c8 2F91      		pop r18
+ 448 00ca 0F90      		pop r0
+ 449 00cc 0FBE      		out __SREG__,r0
+ 450 00ce 0F90      		pop r0
+ 451 00d0 1F90      		pop r1
+ 452 00d2 1895      		reti
+ 454               	.Lscope5:
+ 456               		.stabd	78,0,0
+ 458               	.global	__vector_18
+ 460               	__vector_18:
+ 461               		.stabd	46,0,0
+ 133:zad3.c        **** 
+ 134:zad3.c        **** ISR(USART_RX_vect) {
+ 463               	.LM23:
+ 464               	.LFBB6:
+ 465 00d4 1F92      		push r1
+ 466 00d6 0F92      		push r0
+ 467 00d8 0FB6      		in r0,__SREG__
+ 468 00da 0F92      		push r0
+ 469 00dc 1124      		clr __zero_reg__
+ 470 00de 2F93      		push r18
+ 471 00e0 3F93      		push r19
+ 472 00e2 4F93      		push r20
+ 473 00e4 5F93      		push r21
+ 474 00e6 6F93      		push r22
+ 475 00e8 7F93      		push r23
+ 476 00ea 8F93      		push r24
+ 477 00ec 9F93      		push r25
+ 478 00ee AF93      		push r26
+ 479 00f0 BF93      		push r27
+ 480 00f2 EF93      		push r30
+ 481 00f4 FF93      		push r31
+ 482 00f6 CF93      		push r28
+ 483 00f8 DF93      		push r29
+ 484 00fa 1F92      		push __zero_reg__
+ 485 00fc CDB7      		in r28,__SP_L__
+ 486 00fe DEB7      		in r29,__SP_H__
+ 487               	/* prologue: Signal */
+ 488               	/* frame size = 1 */
+ 489               	/* stack size = 18 */
+ 490               	.L__stack_usage = 18
+ 135:zad3.c        ****     uint8_t value = UDR0;
+ 492               	.LM24:
+ 493 0100 8091 C600 		lds r24,198
+ 494 0104 8983      		std Y+1,r24
+ 136:zad3.c        ****     xQueueSendFromISR(bufor_in, (void*)&value, NULL);
+ 496               	.LM25:
+ 497 0106 20E0      		ldi r18,0
+ 498 0108 40E0      		ldi r20,0
+ 499 010a 50E0      		ldi r21,0
+ 500 010c BE01      		movw r22,r28
+ 501 010e 6F5F      		subi r22,-1
+ 502 0110 7F4F      		sbci r23,-1
+ 503 0112 8091 0000 		lds r24,bufor_in
+ 504 0116 9091 0000 		lds r25,bufor_in+1
+ 505 011a 0E94 0000 		call xQueueGenericSendFromISR
+ 506               	/* epilogue start */
+ 137:zad3.c        **** }...
+ 508               	.LM26:
+ 509 011e 0F90      		pop __tmp_reg__
+ 510 0120 DF91      		pop r29
+ 511 0122 CF91      		pop r28
+ 512 0124 FF91      		pop r31
+ 513 0126 EF91      		pop r30
+ 514 0128 BF91      		pop r27
+ 515 012a AF91      		pop r26
+ 516 012c 9F91      		pop r25
+ 517 012e 8F91      		pop r24
+ 518 0130 7F91      		pop r23
+ 519 0132 6F91      		pop r22
+ 520 0134 5F91      		pop r21
+ 521 0136 4F91      		pop r20
+ 522 0138 3F91      		pop r19
+ 523 013a 2F91      		pop r18
+ 524 013c 0F90      		pop r0
+ 525 013e 0FBE      		out __SREG__,r0
+ 526 0140 0F90      		pop r0
+ 527 0142 1F90      		pop r1
+ 528 0144 1895      		reti
+ 533               	.Lscope6:
+ 535               		.stabd	78,0,0
+ 536               		.comm	bufor_out,2,1
+ 537               		.comm	bufor_in,2,1
+ 538               		.comm	uart_file,14,1
+ 543               	.Letext0:
+ 544               		.ident	"GCC: (GNU) 5.4.0"
+ 545               	.global __do_copy_data
+ 546               	.global __do_clear_bss
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 zad3.c
+     /tmp/ccjiTyIY.s:2      *ABS*:000000000000003e __SP_H__
+     /tmp/ccjiTyIY.s:3      *ABS*:000000000000003d __SP_L__
+     /tmp/ccjiTyIY.s:4      *ABS*:000000000000003f __SREG__
+     /tmp/ccjiTyIY.s:5      *ABS*:0000000000000000 __tmp_reg__
+     /tmp/ccjiTyIY.s:6      *ABS*:0000000000000001 __zero_reg__
+     /tmp/ccjiTyIY.s:193    .text:0000000000000000 vSerial
+                            *COM*:000000000000000e uart_file
+     /tmp/ccjiTyIY.s:253    .text:0000000000000056 vBlinkLed
+     /tmp/ccjiTyIY.s:293    .text.startup:0000000000000000 main
+     /tmp/ccjiTyIY.s:371    .text:000000000000006a vApplicationIdleHook
+     /tmp/ccjiTyIY.s:388    .text:000000000000006c __vector_19
+                            *COM*:0000000000000002 bufor_out
+     /tmp/ccjiTyIY.s:460    .text:00000000000000d4 __vector_18
+                            *COM*:0000000000000002 bufor_in
+
+UNDEFINED SYMBOLS
+uart_init
+__iob
+puts
+fgetc
+printf
+vTaskDelay
+xTaskCreate
+vTaskStartScheduler
+xQueueIsQueueEmptyFromISR
+xQueueReceiveFromISR
+xQueueGenericSendFromISR
+__do_copy_data
+__do_clear_bss
