@@ -1,0 +1,28 @@
+klasa Student:
+	funkcja getCourses():
+		zwróć kursy
+		
+klasa UsosWebPage:
+	funkcja show():
+		pageLayout = GradeController.getStudentGradeInfo()
+		
+klasa GradeController:
+	zmienna(Student) index
+	
+	funkcja getStudentGradeInfo():
+		kursy = index.getCourses()
+		dla każdego x w kursy:
+			dodaj do tablit oceny:
+				x.getMark(index)
+		zwróć oceny
+	
+klasa Course:
+	tablica course_mark
+	zmienna(Student) index
+	
+	funkcja getMark(Student student):
+		zwróć getValue()
+	funkcja getValue():
+		zwróć course_mark[index]
+		
+Nie, ponieważ nie ponieważ różne przeczy można implementować w różny sposób. Kody jednak powinny być podobne.
