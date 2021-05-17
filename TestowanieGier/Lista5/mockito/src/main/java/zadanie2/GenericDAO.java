@@ -1,11 +1,8 @@
 package zadanie2;
 
 public class GenericDAO {
-
     private Session session;
-
     private DbLogger dbLogger;
-
     public void save(Object o) throws SessionOpenException {
         try {
             session.open();
@@ -18,13 +15,10 @@ public class GenericDAO {
             session.rollbackTransaction();
             session.close();
         }
-
     }
-
     public void setDbLogger(DbLogger dbLogger) {
         this.dbLogger = dbLogger;
     }
-
     public void setSession(Session session) {
         this.session = session;
     }
