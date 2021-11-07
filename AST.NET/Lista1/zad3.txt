@@ -1,0 +1,1 @@
+Tą samą witrynę można postawić na wielu różnych nagłówkach jako zabezpieczenie w przypadku awarii. Stawianie dwóch serwerów jest przykładem redundancji.

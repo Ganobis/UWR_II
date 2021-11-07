@@ -1,56 +1,345 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<robot generator="Robot 4.0.3 (Python 3.9.5 on win32)" generated="20210617 11:43:10.714" rpa="false" schemaversion="2">
+<robot generator="Robot 4.0.3 (Python 3.9.5 on win32)" generated="20210617 16:20:04.534" rpa="false" schemaversion="2">
 <suite id="s1" name="Lista" source="C:\Users\kasia\OneDrive\Dokumenty\GitHub\UWR_II\TestowanieGier\Lista8\lista.robot">
-<test id="s1-t1" name="Zadanie4">
+<test id="s1-t1" name="Zadanie1">
 <kw name="Create Webdriver" library="SeleniumLibrary">
 <arg>${BROWSER}</arg>
 <arg>executable_path=${DRIVER}</arg>
 <doc>Creates an instance of Selenium WebDriver.</doc>
-<msg timestamp="20210617 11:43:10.931" level="INFO">Creating an instance of the Chrome WebDriver.</msg>
-<status status="PASS" starttime="20210617 11:43:10.930" endtime="20210617 11:43:12.373"/>
+<msg timestamp="20210617 16:20:06.609" level="INFO">Creating an instance of the Chrome WebDriver.</msg>
+<status status="PASS" starttime="20210617 16:20:06.608" endtime="20210617 16:20:08.973"/>
 </kw>
 <kw name="Go To" library="SeleniumLibrary">
 <arg>${URL}</arg>
 <doc>Navigates the current browser window to the provided ``url``.</doc>
-<msg timestamp="20210617 11:43:12.374" level="INFO">Opening url 'file:///C:/Users/kasia/OneDrive/Pulpit/aaa/page/index.html'</msg>
-<status status="PASS" starttime="20210617 11:43:12.374" endtime="20210617 11:43:12.569"/>
+<msg timestamp="20210617 16:20:08.974" level="INFO">Opening url 'file:///C:/Users/kasia/OneDrive/Pulpit/aaa/page/index.html'</msg>
+<status status="PASS" starttime="20210617 16:20:08.974" endtime="20210617 16:20:09.364"/>
 </kw>
-<kw name="Get WebElements" library="SeleniumLibrary">
-<var>@{var}</var>
-<arg>xpath: //div[@class='container']</arg>
-<doc>Returns a list of WebElement objects matching the ``locator``.</doc>
-<msg timestamp="20210617 11:43:12.614" level="INFO">@{var} = [ &lt;selenium.webdriver.remote.webelement.WebElement (session="6b82944ec05b3ab412d32fa337086d4c", element="bc3a6f40-62d2-413b-b709-233d5116aad0")&gt; ]</msg>
-<status status="PASS" starttime="20210617 11:43:12.593" endtime="20210617 11:43:12.614"/>
+<kw name="Get Location" library="SeleniumLibrary">
+<var>${url1}</var>
+<doc>Returns the current browser window URL.</doc>
+<msg timestamp="20210617 16:20:09.399" level="INFO">${url1} = file:///C:/Users/kasia/OneDrive/Pulpit/aaa/page/index.html</msg>
+<status status="PASS" starttime="20210617 16:20:09.374" endtime="20210617 16:20:09.399"/>
 </kw>
-<kw name="Get Element Attribute" library="SeleniumLibrary">
-<var>${x}</var>
-<arg>${var}</arg>
-<arg>a</arg>
-<doc>Returns the value of ``attribute`` from the element ``locator``.</doc>
-<msg timestamp="20210617 11:43:12.638" level="INFO">${x} = None</msg>
-<status status="PASS" starttime="20210617 11:43:12.627" endtime="20210617 11:43:12.638"/>
+<kw name="Click Element" library="SeleniumLibrary">
+<arg>id:new_window_button</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<msg timestamp="20210617 16:20:09.409" level="INFO">Clicking element 'id:new_window_button'.</msg>
+<status status="PASS" starttime="20210617 16:20:09.403" endtime="20210617 16:20:09.572"/>
 </kw>
-<kw name="Log To Console" library="BuiltIn">
-<arg>${x}</arg>
-<doc>Logs the given message to the console.</doc>
-<status status="PASS" starttime="20210617 11:43:12.642" endtime="20210617 11:43:12.644"/>
+<kw name="Get Location" library="SeleniumLibrary">
+<var>${url2}</var>
+<doc>Returns the current browser window URL.</doc>
+<msg timestamp="20210617 16:20:09.594" level="INFO">${url2} = file:///C:/Users/kasia/OneDrive/Pulpit/aaa/page/index.html</msg>
+<status status="PASS" starttime="20210617 16:20:09.575" endtime="20210617 16:20:09.594"/>
+</kw>
+<kw name="Should Be Equal" library="BuiltIn">
+<arg>${url1}</arg>
+<arg>${url2}</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="PASS" starttime="20210617 16:20:09.595" endtime="20210617 16:20:09.596"/>
 </kw>
 <kw name="Close Browser" library="SeleniumLibrary">
 <doc>Closes the current browser.</doc>
-<status status="PASS" starttime="20210617 11:43:12.652" endtime="20210617 11:43:15.104"/>
+<status status="PASS" starttime="20210617 16:20:09.596" endtime="20210617 16:20:12.194"/>
 </kw>
-<status status="PASS" starttime="20210617 11:43:10.929" endtime="20210617 11:43:15.104"/>
+<status status="PASS" starttime="20210617 16:20:06.607" endtime="20210617 16:20:12.195"/>
 </test>
-<status status="PASS" starttime="20210617 11:43:10.714" endtime="20210617 11:43:15.112"/>
+<test id="s1-t2" name="Zadanie2">
+<kw name="Create Webdriver" library="SeleniumLibrary">
+<arg>${BROWSER}</arg>
+<arg>executable_path=${DRIVER}</arg>
+<doc>Creates an instance of Selenium WebDriver.</doc>
+<msg timestamp="20210617 16:20:12.197" level="INFO">Creating an instance of the Chrome WebDriver.</msg>
+<status status="PASS" starttime="20210617 16:20:12.197" endtime="20210617 16:20:14.013"/>
+</kw>
+<kw name="Go To" library="SeleniumLibrary">
+<arg>${URL}</arg>
+<doc>Navigates the current browser window to the provided ``url``.</doc>
+<msg timestamp="20210617 16:20:14.014" level="INFO">Opening url 'file:///C:/Users/kasia/OneDrive/Pulpit/aaa/page/index.html'</msg>
+<status status="PASS" starttime="20210617 16:20:14.014" endtime="20210617 16:20:14.320"/>
+</kw>
+<kw name="Click Element" library="SeleniumLibrary">
+<arg>xpath: //*[contains(text(), "Contact")]</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<msg timestamp="20210617 16:20:14.321" level="INFO">Clicking element 'xpath: //*[contains(text(), "Contact")]'.</msg>
+<status status="PASS" starttime="20210617 16:20:14.320" endtime="20210617 16:20:14.603"/>
+</kw>
+<kw name="Wait Until Page Contains Element" library="SeleniumLibrary">
+<arg>id:contact_form</arg>
+<doc>Waits until the element ``locator`` appears on the current page.</doc>
+<status status="PASS" starttime="20210617 16:20:14.606" endtime="20210617 16:20:14.635"/>
+</kw>
+<kw name="Get Text" library="SeleniumLibrary">
+<var>${var}</var>
+<arg>id:name</arg>
+<doc>Returns the text value of the element identified by ``locator``.</doc>
+<msg timestamp="20210617 16:20:14.717" level="INFO">${var} = </msg>
+<status status="PASS" starttime="20210617 16:20:14.635" endtime="20210617 16:20:14.717"/>
+</kw>
+<kw name="Should Be Equal" library="BuiltIn">
+<arg>${var}</arg>
+<arg>${EMPTY}</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="PASS" starttime="20210617 16:20:14.717" endtime="20210617 16:20:14.719"/>
+</kw>
+<kw name="Get Text" library="SeleniumLibrary">
+<var>${var}</var>
+<arg>id:surname</arg>
+<doc>Returns the text value of the element identified by ``locator``.</doc>
+<msg timestamp="20210617 16:20:14.776" level="INFO">${var} = </msg>
+<status status="PASS" starttime="20210617 16:20:14.719" endtime="20210617 16:20:14.776"/>
+</kw>
+<kw name="Should Be Equal" library="BuiltIn">
+<arg>${var}</arg>
+<arg>${EMPTY}</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="PASS" starttime="20210617 16:20:14.778" endtime="20210617 16:20:14.780"/>
+</kw>
+<kw name="Get Text" library="SeleniumLibrary">
+<var>${var}</var>
+<arg>id:email</arg>
+<doc>Returns the text value of the element identified by ``locator``.</doc>
+<msg timestamp="20210617 16:20:14.830" level="INFO">${var} = </msg>
+<status status="PASS" starttime="20210617 16:20:14.783" endtime="20210617 16:20:14.831"/>
+</kw>
+<kw name="Should Be Equal" library="BuiltIn">
+<arg>${var}</arg>
+<arg>${EMPTY}</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="PASS" starttime="20210617 16:20:14.831" endtime="20210617 16:20:14.833"/>
+</kw>
+<kw name="Get Text" library="SeleniumLibrary">
+<var>${var}</var>
+<arg>id:message</arg>
+<doc>Returns the text value of the element identified by ``locator``.</doc>
+<msg timestamp="20210617 16:20:14.869" level="INFO">${var} = </msg>
+<status status="PASS" starttime="20210617 16:20:14.834" endtime="20210617 16:20:14.869"/>
+</kw>
+<kw name="Should Be Equal" library="BuiltIn">
+<arg>${var}</arg>
+<arg>${EMPTY}</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="PASS" starttime="20210617 16:20:14.870" endtime="20210617 16:20:14.872"/>
+</kw>
+<kw name="Input Text" library="SeleniumLibrary">
+<arg>id:name</arg>
+<arg>Jan</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<msg timestamp="20210617 16:20:14.874" level="INFO">Typing text 'Jan' into text field 'id:name'.</msg>
+<status status="PASS" starttime="20210617 16:20:14.873" endtime="20210617 16:20:14.993"/>
+</kw>
+<kw name="Input Text" library="SeleniumLibrary">
+<arg>id:surname</arg>
+<arg>Kowalski</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<msg timestamp="20210617 16:20:14.995" level="INFO">Typing text 'Kowalski' into text field 'id:surname'.</msg>
+<status status="PASS" starttime="20210617 16:20:14.994" endtime="20210617 16:20:15.146"/>
+</kw>
+<kw name="Input Text" library="SeleniumLibrary">
+<arg>id:email</arg>
+<arg>jan.kowalski@gmail.com</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<msg timestamp="20210617 16:20:15.150" level="INFO">Typing text 'jan.kowalski@gmail.com' into text field 'id:email'.</msg>
+<status status="PASS" starttime="20210617 16:20:15.149" endtime="20210617 16:20:15.299"/>
+</kw>
+<kw name="Input Text" library="SeleniumLibrary">
+<arg>id:message</arg>
+<arg>Krótka Wiadomość</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<msg timestamp="20210617 16:20:15.303" level="INFO">Typing text 'Krótka Wiadomość' into text field 'id:message'.</msg>
+<status status="PASS" starttime="20210617 16:20:15.301" endtime="20210617 16:20:15.438"/>
+</kw>
+<kw name="Click Element" library="SeleniumLibrary">
+<arg>id:country</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<msg timestamp="20210617 16:20:15.440" level="INFO">Clicking element 'id:country'.</msg>
+<status status="PASS" starttime="20210617 16:20:15.439" endtime="20210617 16:20:15.568"/>
+</kw>
+<kw name="Click Element" library="SeleniumLibrary">
+<arg>xpath: //*[contains(text(), "Poland")]</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<msg timestamp="20210617 16:20:15.575" level="INFO">Clicking element 'xpath: //*[contains(text(), "Poland")]'.</msg>
+<status status="PASS" starttime="20210617 16:20:15.575" endtime="20210617 16:20:15.639"/>
+</kw>
+<kw name="Click Button" library="SeleniumLibrary">
+<arg>xpath: //input[@type='submit']</arg>
+<doc>Clicks the button identified by ``locator``.</doc>
+<msg timestamp="20210617 16:20:15.643" level="INFO">Clicking button 'xpath: //input[@type='submit']'.</msg>
+<status status="PASS" starttime="20210617 16:20:15.641" endtime="20210617 16:20:15.744"/>
+</kw>
+<kw name="Alert Should Be Present" library="SeleniumLibrary">
+<arg>text=Are you sure?</arg>
+<arg>action=ACCEPT</arg>
+<doc>Verifies that an alert is present and by default, accepts it.</doc>
+<msg timestamp="20210617 16:20:15.746" level="INFO">HANDLE::&lt;class 'NoneType'&gt;::None</msg>
+<status status="PASS" starttime="20210617 16:20:15.745" endtime="20210617 16:20:15.758"/>
+</kw>
+<kw name="Close Browser" library="SeleniumLibrary">
+<doc>Closes the current browser.</doc>
+<status status="PASS" starttime="20210617 16:20:15.760" endtime="20210617 16:20:18.405"/>
+</kw>
+<status status="PASS" starttime="20210617 16:20:12.196" endtime="20210617 16:20:18.406"/>
+</test>
+<test id="s1-t3" name="Zadanie3">
+<kw name="Create Webdriver" library="SeleniumLibrary">
+<arg>${BROWSER}</arg>
+<arg>executable_path=${DRIVER}</arg>
+<doc>Creates an instance of Selenium WebDriver.</doc>
+<msg timestamp="20210617 16:20:18.410" level="INFO">Creating an instance of the Chrome WebDriver.</msg>
+<status status="PASS" starttime="20210617 16:20:18.409" endtime="20210617 16:20:20.250"/>
+</kw>
+<kw name="Go To" library="SeleniumLibrary">
+<arg>${URL}</arg>
+<doc>Navigates the current browser window to the provided ``url``.</doc>
+<msg timestamp="20210617 16:20:20.254" level="INFO">Opening url 'file:///C:/Users/kasia/OneDrive/Pulpit/aaa/page/index.html'</msg>
+<status status="PASS" starttime="20210617 16:20:20.253" endtime="20210617 16:20:20.570"/>
+</kw>
+<kw name="Click Element" library="SeleniumLibrary">
+<arg>xpath: //*[contains(text(), "Gallery")]</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<msg timestamp="20210617 16:20:20.576" level="INFO">Clicking element 'xpath: //*[contains(text(), "Gallery")]'.</msg>
+<status status="PASS" starttime="20210617 16:20:20.576" endtime="20210617 16:20:26.764"/>
+</kw>
+<kw name="Get WebElements" library="SeleniumLibrary">
+<var>${vars}</var>
+<arg>xpath: //*[@class='gallery']</arg>
+<doc>Returns a list of WebElement objects matching the ``locator``.</doc>
+<msg timestamp="20210617 16:20:26.810" level="INFO">${vars} = [&lt;selenium.webdriver.remote.webelement.WebElement (session="280c90fce8796021fa2c31571861ae89", element="e183688b-88a0-4b75-9e58-25001096cbe9")&gt;, &lt;selenium.webdriver.remote.webelement.WebElement (sessi...</msg>
+<status status="PASS" starttime="20210617 16:20:26.765" endtime="20210617 16:20:26.810"/>
+</kw>
+<kw name="Get Length" library="BuiltIn">
+<var>${length}</var>
+<arg>${vars}</arg>
+<doc>Returns and logs the length of the given item as an integer.</doc>
+<msg timestamp="20210617 16:20:26.826" level="INFO">Length is 11</msg>
+<msg timestamp="20210617 16:20:26.826" level="INFO">${length} = 11</msg>
+<status status="PASS" starttime="20210617 16:20:26.825" endtime="20210617 16:20:26.826"/>
+</kw>
+<kw name="Should Be Equal" library="BuiltIn">
+<arg>${length}</arg>
+<arg>${11}</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="PASS" starttime="20210617 16:20:26.826" endtime="20210617 16:20:26.827"/>
+</kw>
+<for flavor="IN">
+<var>${var}</var>
+<value>${vars}</value>
+<iter>
+<var name="${var}">[&lt;selenium.webdriver.remote.webelement.WebElement (session="280c90fce8796021fa2c31571861ae89", element="e183688b-88a0-4b75-9e58-25001096cbe9")&gt;, &lt;selenium.webdriver.remote.webelement.WebElement (sessi...</var>
+<kw name="Get Element Attribute" library="SeleniumLibrary">
+<var>${var}</var>
+<arg>${var}</arg>
+<arg>src</arg>
+<doc>Returns the value of ``attribute`` from the element ``locator``.</doc>
+<msg timestamp="20210617 16:20:26.848" level="INFO">${var} = file:///C:/Users/kasia/OneDrive/Pulpit/aaa/page/images/zolwie.jpg</msg>
+<status status="PASS" starttime="20210617 16:20:26.828" endtime="20210617 16:20:26.848"/>
+</kw>
+<kw name="Log To Console" library="BuiltIn">
+<arg>${var}</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" starttime="20210617 16:20:26.848" endtime="20210617 16:20:26.849"/>
+</kw>
+<status status="PASS" starttime="20210617 16:20:26.828" endtime="20210617 16:20:26.849"/>
+</iter>
+<status status="PASS" starttime="20210617 16:20:26.828" endtime="20210617 16:20:26.849"/>
+</for>
+<kw name="Close Browser" library="SeleniumLibrary">
+<doc>Closes the current browser.</doc>
+<status status="PASS" starttime="20210617 16:20:26.849" endtime="20210617 16:20:29.791"/>
+</kw>
+<status status="PASS" starttime="20210617 16:20:18.408" endtime="20210617 16:20:29.792"/>
+</test>
+<test id="s1-t4" name="Zadanie4">
+<kw name="Create Webdriver" library="SeleniumLibrary">
+<arg>${BROWSER}</arg>
+<arg>executable_path=${DRIVER}</arg>
+<doc>Creates an instance of Selenium WebDriver.</doc>
+<msg timestamp="20210617 16:20:29.797" level="INFO">Creating an instance of the Chrome WebDriver.</msg>
+<status status="PASS" starttime="20210617 16:20:29.796" endtime="20210617 16:20:31.585"/>
+</kw>
+<kw name="Go To" library="SeleniumLibrary">
+<arg>${URL}</arg>
+<doc>Navigates the current browser window to the provided ``url``.</doc>
+<msg timestamp="20210617 16:20:31.586" level="INFO">Opening url 'file:///C:/Users/kasia/OneDrive/Pulpit/aaa/page/index.html'</msg>
+<status status="PASS" starttime="20210617 16:20:31.585" endtime="20210617 16:20:31.918"/>
+</kw>
+<kw name="Get WebElements" library="SeleniumLibrary">
+<var>${vars}</var>
+<arg>xpath: //*[@class='img_link']</arg>
+<doc>Returns a list of WebElement objects matching the ``locator``.</doc>
+<msg timestamp="20210617 16:20:31.977" level="INFO">${vars} = [&lt;selenium.webdriver.remote.webelement.WebElement (session="1fe2965f50cb1f10e47adc339af216f3", element="21f89691-2bbf-4b17-962d-cf186a16e7c7")&gt;, &lt;selenium.webdriver.remote.webelement.WebElement (sessi...</msg>
+<status status="PASS" starttime="20210617 16:20:31.920" endtime="20210617 16:20:31.978"/>
+</kw>
+<kw name="Get Length" library="BuiltIn">
+<var>${length}</var>
+<arg>${vars}</arg>
+<doc>Returns and logs the length of the given item as an integer.</doc>
+<msg timestamp="20210617 16:20:31.988" level="INFO">Length is 4</msg>
+<msg timestamp="20210617 16:20:31.988" level="INFO">${length} = 4</msg>
+<status status="PASS" starttime="20210617 16:20:31.988" endtime="20210617 16:20:31.989"/>
+</kw>
+<kw name="Should Be Equal" library="BuiltIn">
+<arg>${length}</arg>
+<arg>${4}</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="PASS" starttime="20210617 16:20:31.991" endtime="20210617 16:20:31.992"/>
+</kw>
+<for flavor="IN">
+<var>${var}</var>
+<value>${vars}</value>
+<iter>
+<var name="${var}">[&lt;selenium.webdriver.remote.webelement.WebElement (session="1fe2965f50cb1f10e47adc339af216f3", element="21f89691-2bbf-4b17-962d-cf186a16e7c7")&gt;, &lt;selenium.webdriver.remote.webelement.WebElement (sessi...</var>
+<kw name="Get Element Attribute" library="SeleniumLibrary">
+<var>${var}</var>
+<arg>${var}</arg>
+<arg>alt</arg>
+<doc>Returns the value of ``attribute`` from the element ``locator``.</doc>
+<msg timestamp="20210617 16:20:32.051" level="INFO">${var} = Pinterest</msg>
+<status status="PASS" starttime="20210617 16:20:32.009" endtime="20210617 16:20:32.051"/>
+</kw>
+<kw name="Go To" library="SeleniumLibrary">
+<arg>https://pl.pinterest.com/</arg>
+<doc>Navigates the current browser window to the provided ``url``.</doc>
+<msg timestamp="20210617 16:20:32.051" level="INFO">Opening url 'https://pl.pinterest.com/'</msg>
+<status status="PASS" starttime="20210617 16:20:32.051" endtime="20210617 16:20:42.728"/>
+</kw>
+<kw name="Get Title" library="SeleniumLibrary">
+<var>${title}</var>
+<doc>Returns the title of the current page.</doc>
+<msg timestamp="20210617 16:20:42.756" level="INFO">${title} = Pinterest - Polska</msg>
+<status status="PASS" starttime="20210617 16:20:42.728" endtime="20210617 16:20:42.756"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${title}</arg>
+<arg>${var}</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20210617 16:20:42.756" endtime="20210617 16:20:42.757"/>
+</kw>
+<kw name="Go Back" library="SeleniumLibrary">
+<doc>Simulates the user clicking the back button on their browser.</doc>
+<status status="PASS" starttime="20210617 16:20:42.757" endtime="20210617 16:20:43.030"/>
+</kw>
+<status status="PASS" starttime="20210617 16:20:32.009" endtime="20210617 16:20:43.030"/>
+</iter>
+<status status="PASS" starttime="20210617 16:20:32.009" endtime="20210617 16:20:43.030"/>
+</for>
+<kw name="Close Browser" library="SeleniumLibrary">
+<doc>Closes the current browser.</doc>
+<status status="PASS" starttime="20210617 16:20:43.031" endtime="20210617 16:20:45.877"/>
+</kw>
+<status status="PASS" starttime="20210617 16:20:29.795" endtime="20210617 16:20:45.878"/>
+</test>
+<status status="PASS" starttime="20210617 16:20:04.539" endtime="20210617 16:20:45.880"/>
 </suite>
 <statistics>
 <total>
-<stat pass="1" fail="0" skip="0">All Tests</stat>
+<stat pass="4" fail="0" skip="0">All Tests</stat>
 </total>
 <tag>
 </tag>
 <suite>
-<stat pass="1" fail="0" skip="0" id="s1" name="Lista">Lista</stat>
+<stat pass="4" fail="0" skip="0" id="s1" name="Lista">Lista</stat>
 </suite>
 </statistics>
 <errors>

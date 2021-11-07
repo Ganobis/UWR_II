@@ -1,0 +1,1 @@
+Na serwerze deweloperskim na tej samej maszynie użyłbym metody "File system", a na serwer zdalnym metody FTP.

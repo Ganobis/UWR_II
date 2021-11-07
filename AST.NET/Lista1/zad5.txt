@@ -1,0 +1,1 @@
+IIS Express jest mniejszą zoptymaliwowaną wersją IIS. Przy korzystaniu z IIS musi być zdefiniowana pula aplikacji, katalog z aplikacją i wiele innych rzeczy. W przypadku IIS Express Visual Studio robie te rzeczy automatycznie.
