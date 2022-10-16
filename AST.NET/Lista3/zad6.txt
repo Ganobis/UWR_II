@@ -1,0 +1,1 @@
+app_offline.htm to plik aplikacji jest używany przez moduł ASP.NET Core do bezpiecznego zamykamia aplikacji. Jeśli taki plik znajduje się w plikach strony to ASP.NET Core zamykając aplikacje zatrzyma przychodzące żądania. Jeśli aplikacje będzie wciąż działać po ustalonym czasie ASP.NET COre zatrzyma działające procesy. 

@@ -1,0 +1,2 @@
+Własność statyczna HttpContext.Current przechowuje informacje jakie jak Request, Response, Server, Session, Item, Cache, informacje o urzytkownuiku i tym podobne. Ułatwia ona dostęp do tych informacji.
+Właściwość IsPostNotification obiektu HttpContext przechowuje referencje do do aktualnie przetwarzanej strony.

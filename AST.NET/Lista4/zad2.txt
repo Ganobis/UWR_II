@@ -1,0 +1,6 @@
+a) Ponieważ przechowywanie haseł w takiej postaci jest nebezpieczne.
+b) Nie można zdefiniować funkcje skrótu ponieważ jest to działanie które jest niebezpieczne
+c) Dzięki niej trudniej złamać szyfr.
+d) Ponieważ takie przechowywanie hasła jest bezpieczniejsze.
+e) Np ograniczenie ilości logowania na 5 min z jednego urządzenia, stosowanie captcha.
+f) Najlepszym sposobem jest zmiana hasła.
